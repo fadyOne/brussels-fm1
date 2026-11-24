@@ -1031,7 +1031,7 @@ class BackupConnection {
  *   FM-1_9XY            JIANT, Felucca or another Felucca fork: the editor's INFO tells which
  *   anything else       another custom firmware */
 function classifyIdentity(text) {
-  const m = /^FM-1_(\d{3})$/.exec(String(text || ""));
+  const m = /^FM-1_(\d{3,4})$/.exec(String(text || ""));
   if (!m) return text ? "otherfw" : "none";
   const n = +m[1];
   if (n === 15) return "stock";
@@ -1111,7 +1111,8 @@ const otaOf = (up) => up.find((id) => /^ota-/i.test(id.model));
  * Bluetooth part (its third entry: GEN, the songs' saving, Bluetooth, USB HOST). Another one waiting in update mode (the
  * official loader a stopped return to official, or a stopped official update, leaves) would write JIANT's app alone:
  * the FM-1 then says BLUETOOTH PART MISSING */
-const JIANT_LOADER = "ota-FM-1_900";
+const JIANT_LOADER = "ota-FM-1_1000";
+const isOurLoader = (t) => t === "ota-FM-1_1000" || t === "ota-FM-1_900";
 /* (V10.7.22) INFO's Bluetooth part: the tag 58 01 s (1 this build's, 2 missing or another build's) right before the
  * protocol's 43 02 1 x and the last tag (59 01 63); 0: no tag (firmware before it) */
 function infoBt(a) {
@@ -1162,8 +1163,8 @@ async function runInstall(ctx) {
   if (ota) {                                   // in update mode (an interrupted install): the write goes on
     ota.link.close();
     state.fw = { kind: "loader", text: ota.id.text };
-    if (ota.id.text !== JIANT_LOADER)          // (V10.7.22) not JIANT's loader: it would leave JIANT without its Bluetooth part
-      throw fail("foreignLoader", `update mode with ${ota.id.text}, not JIANT's loader (${JIANT_LOADER}): nothing was written`, ota.id.text);
+    if (!isOurLoader(ota.id.text))             // not BRUSSELS/JIANT loader: it would leave the Bluetooth part missing
+      throw fail("foreignLoader", `update mode with ${ota.id.text}, not BRUSSELS loader (${JIANT_LOADER}): nothing was written`, ota.id.text);
     ui.say("resuming", ota.id.text);
     if (!(await up.resume(ctx.image, ui.step, ctx.product))) throw fail("stopped", "the write in update mode stopped");
     return btCheck(ctx);
@@ -1190,7 +1191,7 @@ async function runStock(ctx) {
     state.fw = { kind: "loader", text: ota.id.text };
     if (!ctx.recovery)                         // (V10.7.22) JIANT's loader: Install finishes JIANT (a backup, then back);
                                                // another (a stopped return to official): only Resume finishes it
-      throw ota.id.text === JIANT_LOADER ? fail("stockNeedBackup", "update mode: no backup can be taken there")
+      throw isOurLoader(ota.id.text) ? fail("stockNeedBackup", "update mode: no backup can be taken there")
         : fail("stockNeedResume", `update mode with ${ota.id.text}: no backup can be taken there, Install cannot finish it`, ota.id.text);
     if (!(await ui.confirm("stockConfirm"))) return "cancel";
     if (!(await up.resume(stock.image, ui.step, stock.product))) throw fail("stopped", "the write in update mode stopped");
@@ -1280,7 +1281,7 @@ function stockFileProblem(name, bytes, v15size, allowV16 = false) {
   if (/\.(rar|7z|exe|dmg|pkg|apk)$/i.test(n)) return { code: "stockZip", detail: n };
   let product = "";
   try { product = bytes.length > 960 ? productOf(bytes) : ""; } catch (_) {}
-  if (/^FM-1_9\d\d$|^FM-1_7\d\d$/.test(product) || /^(felucca|jiant|skiff)/i.test(n)) return { code: "stockCustom", detail: `${n} ${product}`.trim() };
+  if (/^FM-1_9\d{2,3}$|^FM-1_1000$|^FM-1_7\d\d$/.test(product) || /^(felucca|jiant|skiff|brussels)/i.test(n)) return { code: "stockCustom", detail: `${n} ${product}`.trim() };
   if (allowV16 && product === "FM-1_016") return null;                  /* (beta) official V16: the full check next */
   if (/^FM-1_0\d\d$/.test(product) && product !== "FM-1_015") return { code: "stockOtherVer", detail: `${n}: ${product}` };
   if (bytes.length !== v15size) return { code: "stockNotV15", detail: `${n}: ${bytes.length} B` };
@@ -1872,7 +1873,7 @@ function showTip(code) {
   for (const s of String(steps).split("|").filter(Boolean)) { const li = document.createElement("li"); li.textContent = s; $("tiptext").appendChild(li); }
 }
 let image = null;
-const meta = {"version": "brussels-0.9", "product": "FM-1_900", "pkg": "../../firmware/felucca-brussels-0.9.fwsc", "channel": "public", "versions": [{"version": "brussels-0.9", "pkg": "../../firmware/felucca-brussels-0.9.fwsc", "product": "FM-1_900", "edition": "", "status": ""}]};
+const meta = {"version": "brussels-0.9.1", "product": "FM-1_1000", "pkg": "../../firmware/felucca-brussels-0.9.1.fwsc", "channel": "public", "versions": [{"version": "brussels-0.9.1", "pkg": "../../firmware/felucca-brussels-0.9.1.fwsc", "product": "FM-1_1000", "edition": "", "status": ""}]};
 const env = envOf(navigator);
 const state = { flow: "", step: "", fw: null };
 let lastError = null, lastUp = null, permission = "";

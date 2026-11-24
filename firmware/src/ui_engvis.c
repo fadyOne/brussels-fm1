@@ -1389,14 +1389,22 @@ static VX_CODE void vx_wheel(const track_t *t, const int32_t *A, int32_t en_home
         for (i = 0; i < 9u; i++)
             if (drw_level(p, i) && vx_hash(i + vxs.nage[5] * 9u) < click) vxs.bub[i] = fm1_ms | 1u;
     nf = vx_fall(age, 154u);                             /* the note's flash */
-    vx_line(&f, -62 * 16, 30 * 16, 62 * 16, 30 * 16, 31 + (en * 77 >> 8));
+    {                                                    /* (BRUSSELS) a fine starfield, drifting slowly behind the roofs */
+        int32_t drift = (ui_prefs & PREF_ANIM_OFF) ? 0 : (int32_t)(fm1_ms / 48u);
+        for (i = 0; i < 14u; i++) {
+            int32_t sx = (vx_hash(i * 17u + 3u) * (124 * 16) / 256 + drift * (int32_t)(1u + i % 3u)) % (124 * 16) - 62 * 16;
+            int32_t sy = -44 * 16 + vx_hash(i * 29u + 7u) * (38 * 16) / 256;
+            vx_dot(&f, sx, sy, (i % 4u == 0u) ? 20 : 13, 42 + (int32_t)(i % 3u) * 13);
+        }
+    }
+    vx_line(&f, -62 * 16, 21 * 16, 62 * 16, 21 * 16, 31 + (en * 77 >> 8));
     for (i = 0; i < 9u; i++) {
         static const int16_t GX[16] = {0, 0, 21, 21, 42, 42, 63, 63, 105, 105, 126, 126, 147, 147, 168, 168};
         static const int16_t GY[16] = {-1, 0, 0, 40, 40, 80, 80, 120, 120, 80, 80, 40, 40, 0, 0, -1};   /* (up from the shoulder; -1: the ground) */
-        int32_t l = drw_level(p, i), X = (-48 + (int32_t)i * 12) * 16, pp = (int32_t)i == pk ? perc : 0, base = 30 * 16, k, r, c, q[32];
-        int32_t h = 48 + l * 90 + (pp * 140 >> 8) + (en * l * 10 >> 8), c0 = (en * 51 >> 8) + hb + (pp * 102 >> 8);
+        int32_t l = drw_level(p, i), X = (-48 + (int32_t)i * 12) * 16, pp = (int32_t)i == pk ? perc : 0, base = 21 * 16, k, r, c, q[32];
+        int32_t h = 44 + l * 82 + (pp * 128 >> 8) + (en * l * 9 >> 8), c0 = (en * 51 >> 8) + hb + (pp * 102 >> 8);
         int32_t bend = ((og_sin((vxs.rph[1] >> 16) - i * 5734u) * dep) >> 15) * h / 60 * 6 / 256, sway = bend / 4;
-        int32_t hop = en > 8 ? (og_sin(vx_ang(mt, 140) + (uint32_t)i * 7000u) * (6 * 16 + en / 2)) >> 15 : 0;
+        int32_t hop = en > 8 ? ((og_sin(vx_ang(mt, 140) + (uint32_t)i * 7000u) + 32767) * (24 + en / 8)) >> 15 : 0;   /* (BRUSSELS) bounce up only: the feet never sink through the square */
         int32_t lean = en > 8 ? (og_sin(vx_ang(mt, 80) + (uint32_t)i * 9000u) * (3 * 16 + en / 4)) >> 15 : 0;
         int32_t jx = lean;                               /* the whole gable breathes with the level */
         int32_t yw = base - h, x0 = X - 84 + jx, hv = clamp(130 + l * 12 + c0, 0, 255), fx, fy;
@@ -1439,14 +1447,14 @@ static VX_CODE void vx_wheel(const track_t *t, const int32_t *A, int32_t en_home
             }
             vx_line(&f, xt, yt, xt, yb, 205);
         }
-        vx_text(f.cx + ((X * f.s) >> 8), f.cy + ((30 * 16 * f.s) >> 8) + 64, d, l ? T_MID : T_DIM);   /* its digit, under it */
+        vx_text(f.cx + ((X * f.s) >> 8), f.cy + ((21 * 16 * f.s) >> 8) + 48, d, l ? T_MID : T_DIM);   /* its digit, under it */
     }
     for (i = 0; i < 9u; i++)                             /* CLICK's bubbles, rising */
         if (vxs.bub[i] && fm1_ms - vxs.bub[i] < 1200u) {
             int32_t a = (int32_t)(fm1_ms - vxs.bub[i]) * 256 / 1000, l = drw_level(p, i);
             vxs.dal = (int16_t)clamp(a, 0, 256);
             vx_ring(&f, (-48 + (int32_t)i * 12) * 16 + ((og_sin((uint32_t)a * 367u) * 24) >> 15),
-                    30 * 16 - (48 + l * 90) - 120 - 64 - (a * 30 * 16 >> 8), 16 + a / 16, 16 + a / 16, 128);
+                    21 * 16 - (44 + l * 82) - 120 - 64 - (a * 30 * 16 >> 8), 16 + a / 16, 16 + a / 16, 128);
             vxs.dal = 0;
         }
     if (T->dust)                                         /* DUST: motes drifting */

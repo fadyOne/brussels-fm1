@@ -35,7 +35,7 @@
 #define FELUCCA_HOTRAM 1         /* (JIANT 0.6.78, experimental) core 0's hottest audio code in RAM (core.h) */
 #endif
 #ifndef FELUCCA_ID
-#define FELUCCA_ID "FM-1_900"    /* package identity (build.py: the .fwsc marker string) */
+#define FELUCCA_ID "FM-1_1000"   /* package identity (BRUSSELS unique ID on The Firmware Hub) */
 #endif
 #ifndef FELUCCA_VERSION
 #define FELUCCA_VERSION "v0.9.18" /* JIANT's (based on Felucca 1.1.5.1): the splash, the menu, the console, the editor */

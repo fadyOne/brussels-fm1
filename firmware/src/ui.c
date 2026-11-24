@@ -130,8 +130,8 @@ static const int16_t USB_GAIN[5] = {4096, 2048, 1024, 512, 256};   /* Q12: 0 -6 
 #define PREF_SERIAL_OFF 64u                    /* MENU > USB SERIAL OFF (#67): no serial console, the device enumerates as
                                                 * audio + MIDI only (usb.c usb_cdc_switch); clear in every older setting = ON */
 #define PREF_RESTORE_ON 128u                   /* MENU > RESTORE LAST ON (1.2, Discussion #130: the autosave written and
-                                                * restored at power-on, project.c). JIANT 0.6.40: OFF by default (clear =
-                                                * OFF, power-on as INIT SYSTEM leaves it); the bit was RESTORE LAST OFF */
+                                                * restored at power-on, project.c). BRUSSELS: ON by default for everyone
+                                                * (prefs_update rev 3, once; the player can still turn it OFF in MENU > SYSTEM) */
 #define fx_latch ui_prefs
 /* (JIANT 0.6.44) the settings brought up to date at power-on (main.c; 0.6.58 the browser emulator too, web/emu, where
  * the punch-in FX had no LATCH): FX LATCH ON by default, once; (0.6.64) OFF again, once, so who turns it ON after
@@ -142,6 +142,11 @@ static void prefs_update(void)
                                                         * held FX locks the FX screen open instead), once */
         ui_prefs &= (uint8_t)~PREF_LATCH;
         prefs_rev = 2u;
+        settings_save();
+    }
+    if (prefs_rev < 3u) {                              /* (BRUSSELS) RESTORE LAST ON by default, once (player can still turn OFF) */
+        ui_prefs |= PREF_RESTORE_ON;
+        prefs_rev = 3u;
         settings_save();
     }
 }

@@ -1,0 +1,11 @@
+{
+  "what": "A soft, light-filled Brussels groovebox for the M-VAVE FM-1: six tracks, animated creatures, warm custom sounds and gentle hold shortcuts, made for quiet sketches and joyful live moments.",
+  "author": "Piknik Elektronik",
+  "kinds": ["groove"],
+  "play": "https://brussels.piknikelektronik.com/emu/",
+  "editor": "https://brussels.piknikelektronik.com/webapp/editor/",
+  "cheat": "https://brussels.piknikelektronik.com/notice/",
+  "image": "docs/card.png",
+  "color": "#FF8A3D",
+  "sounds": "own"
+}
