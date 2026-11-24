@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-3.0-only
  * Copyright (C) 2026 Leo Kuroshita (@kurogedelic), Hügelton Instruments
- * Copyright (C) 2026 Juan Ignacio Antonucci (Juan Jiant) */
+ * Copyright (C) 2026 Juan Ignacio Antonucci (Juan Jiant)
+ * Copyright (C) 2026 Piknik Elektronik (BRUSSELS HOME layout) */
 /* (0.8.5) HOME's lens (ui_lens.c): the panels of ECO and BEING, drawn as the approved mock-up (lente_sistema.html,
  * HOME) in the lens's panel (240 x 140 at y 84). Included by ui_graph.c after ui_being.c. The beings are JIANT's own
  * (ui_being.c: the same genomes, isotherms, nuclei, the same swelling, exciting and swimming with each track's sound,
@@ -174,8 +175,8 @@ static void eco_ell(int32_t cx, int32_t cy, int32_t rx, int32_t ry, uint16_t c)
     }
 }
 /* .. the face (the mock-up's, the bichos'): at (cx, cy) Q4 of a being of radius r Q4, scaled k (Q8); its mouth open e (0..256),
- * its eyes shut (a hit) or asleep (muted), looking up (MUTATE) */
-static void eco_face(int32_t cx, int32_t cy, int32_t r, int32_t k, int32_t e, uint32_t fl)
+ * its eyes shut (a hit) or asleep (muted), looking up (MUTATE). Kept for tests/ui_test.c. */
+__attribute__((unused)) static void eco_face(int32_t cx, int32_t cy, int32_t r, int32_t k, int32_t e, uint32_t fl)
 {
     int32_t rk = r * k >> 8, s = rk >= 19 * 16 ? 3 : 2, ex = rk * 77 >> 8, d;
     int32_t ey = cy - (rk * 31 >> 8), my, mo;
@@ -209,7 +210,6 @@ static void eco_face(int32_t cx, int32_t cy, int32_t r, int32_t k, int32_t e, ui
  * a ring in the accent opens round it */
 static void eco_being(uint32_t c, int32_t cx, int32_t cy, int32_t rq)
 {
-    const genome_t *g = eco_genome(c);
     int32_t en = eco_bx_en(c), rr = rq;
     uint32_t t = eco.tm[c] + c * 20000u;
     if (eco_off(c)) {                                   /* (BRUSSELS 0.1: its Brussels character, asleep / dancing) */

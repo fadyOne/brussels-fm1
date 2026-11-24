@@ -175,7 +175,7 @@ input[type=range] { min-width:0; }
 <main>
   <p id="beta-banner" hidden style="margin:0 0 20px;padding:10px 14px;border:1px solid var(--line);color:var(--jiant-cyan);font:400 13px/1.2 var(--jiant-mono);letter-spacing:.1em">BETA</p>
   <nav class="lang" id="lang" aria-label="Language"><button data-lang="fr" lang="fr">FR</button><button data-lang="en" lang="en">EN</button></nav>
-  <h1 class="jiant-wordmark"><a href="/" aria-label="BRUSSELS home">BRUSSELS<span class="fm">FM-1</span></a><span class="jiant-tool">INSTALLER</span></h1>
+  <h1 class="jiant-wordmark"><a href="../" aria-label="BRUSSELS home">BRUSSELS<span class="fm">FM-1</span></a><span class="jiant-tool">INSTALLER</span></h1>
   <p class="small" style="margin:-12px 0 24px;letter-spacing:.04em">by Piknik Elektronik</p>
   <p data-t="intro"></p>
   <p class="small" data-t="warn"></p>
@@ -1873,7 +1873,7 @@ function showTip(code) {
   for (const s of String(steps).split("|").filter(Boolean)) { const li = document.createElement("li"); li.textContent = s; $("tiptext").appendChild(li); }
 }
 let image = null;
-const meta = {"version": "brussels-0.9.1", "product": "FM-1_1000", "pkg": "../../firmware/felucca-brussels-0.9.1.fwsc", "channel": "public", "versions": [{"version": "brussels-0.9.1", "pkg": "../../firmware/felucca-brussels-0.9.1.fwsc", "product": "FM-1_1000", "edition": "", "status": ""}]};
+const meta = {"version": "brussels-0.9.2", "product": "FM-1_1000", "pkg": "../../firmware/felucca-brussels-0.9.2.fwsc", "channel": "public", "versions": [{"version": "brussels-0.9.2", "pkg": "../../firmware/felucca-brussels-0.9.2.fwsc", "product": "FM-1_1000", "edition": "", "status": ""}]};
 const env = envOf(navigator);
 const state = { flow: "", step: "", fw: null };
 let lastError = null, lastUp = null, permission = "";

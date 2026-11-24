@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-only
+ * Copyright (C) 2026 Piknik Elektronik
  * BRUSSELS 0.2: the beings as Brussels characters, drawn in line (the fanfare's, docs/creatures): the cone of fries,
  * Manneken Pis, an Atomium, a waffle, a chou, the mussels, a praline, the sauce bottle. Drawn where JIANT's isotherm beings were (being_lines, HOME's
  * eco_being, the DRUM-X colony, the save slots), moved by the same swim, level and hits (ui_being.c, ui_lzhome.c). The

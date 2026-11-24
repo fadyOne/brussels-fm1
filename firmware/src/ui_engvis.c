@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-3.0-only
  * Copyright (C) 2026 Leo Kuroshita (@kurogedelic), Hügelton Instruments
- * Copyright (C) 2026 Juan Ignacio Antonucci (Juan Jiant) */
+ * Copyright (C) 2026 Juan Ignacio Antonucci (Juan Jiant)
+ * Copyright (C) 2026 Piknik Elektronik (BRUSSELS visuals & characters) */
 /* (JIANT 0.9.4) Three engines draw their own creature where every other engine draws its being (ui_being.c): EDIT's
  * SOUND (ui_lzedit.c graph_sound_lz, on the left) and HOME's BEING (ui_lzhome.c, large in the middle); DRUM-X's kit
  * on EDIT > KIT and SOUND 1..4 (the whole panel), the colony staying on KIT 2, KIT 3 and X-MOD. Line art only,
@@ -708,25 +709,6 @@ static const int8_t VX_AN[3][VA_NP] = {
 static const uint8_t VA_EYE_R[3] = {3, 5, 2};
 /* MODE -> the animal on the line insect 0 .. bird 128 .. mammal 256; the middle of its presets' SIZE */
 static const uint8_t VA_POS[AN_NMODE] = {128, 0, 128, 0, 255}, VA_MID[AN_NMODE] = {64, 30, 50, 70, 64};   /* (.. its presets' SIZE) */
-/* a rooster's plume: a spine of 5 points (root, then 4; units: x right, y down) from (rx0, ry0), drawn as a leaf (out along one
- * side, the tip, back along the other) with its quill; wgt the bird's weight (0..256), sw the sway of the tip (Q4) */
-static VX_CODE void vx_plume(const vxf_t *f, int32_t rx0, int32_t ry0, const int8_t *sp, int32_t wgt, int32_t sw, int32_t h)
-{
-    int32_t sx[5], sy[5], q[16], i;
-    for (i = 0; i < 5; i++) {
-        sx[i] = rx0 + ((sp[2 * i] * 12 * wgt) >> 8) + (sw * i * i >> 4);
-        sy[i] = ry0 + ((sp[2 * i + 1] * 14 * wgt) >> 8);
-    }
-    for (i = 0; i < 3; i++) {
-        int32_t d = (i == 1 ? 36 : i == 2 ? 22 : 18) * wgt >> 8;
-        q[2 * i] = sx[i + 1]; q[2 * i + 1] = sy[i + 1] - d;
-        q[2 * (6 - i)] = sx[i + 1]; q[2 * (6 - i) + 1] = sy[i + 1] + d;
-    }
-    q[6] = sx[4]; q[7] = sy[4];
-    q[14] = sx[0]; q[15] = sy[0];
-    vx_curve(f, q, 8, 1, h);
-    vx_line(f, sx[0], sy[0], sx[3], sy[3], h - 70);
-}
 /* the side rooster from the HTML trial (docs/coq.html): one filled bird, html px about (124, 140) */
 #define CQX(X) ((((X) - 124) * 1440) / 192)
 #define CQY(Y) ((((Y) - 140) * 1120) / 144)
@@ -813,7 +795,7 @@ static void vx_coq(const vxf_t *f, int32_t act)
 #undef CQY
 static VX_CODE void vx_animal(const track_t *t, int32_t cx, int32_t cy, int32_t s, int32_t en_home)
 {
-    vxf_t f = {cx, cy, s};
+    vxf_t f = {cx + 160, cy + 128, s * 88 / 100};
     const int16_t *p = t->p;
     uint32_t mode = an_mode(p), i;
     int32_t en = vx_level(t, 1, en_home), act = 0, w[3], m, tgt, bw, w1, w2, fd;
@@ -897,37 +879,11 @@ static uint32_t vx_age(const track_t *t, uint32_t k, int32_t *note)
     if (note) *note = (int32_t)n;
     return fm1_ms - vxs.nms[k] < 4000u ? fm1_ms - vxs.nms[k] : 4000u;
 }
-/* a polyline of n points (Q4 units: x y pairs), closed or not */
-static void vx_poly(const vxf_t *f, const int32_t *p, uint32_t n, int closed, int32_t h)
-{
-    uint32_t i;
-    for (i = 1; i < n; i++)
-        vx_line(f, p[2u * i - 2u], p[2u * i - 1u], p[2u * i], p[2u * i + 1u], h);
-    if (closed)
-        vx_line(f, p[2u * n - 2u], p[2u * n - 1u], p[0], p[1], h);
-}
-/* a line between two points in polar form about c (cx cy, x y scales / 256): angles (16-bit turns), radii (Q4 units) */
-static void vx_pl(const vxf_t *f, const int32_t *c, uint32_t a0, int32_t r0, uint32_t a1, int32_t r1, int32_t h)
-{
-    vx_line(f, c[0] + (((og_cos(a0) * r0) >> 15) * c[2] >> 8), c[1] + (((og_sin(a0) * r0) >> 15) * c[3] >> 8),
-            c[0] + (((og_cos(a1) * r1) >> 15) * c[2] >> 8), c[1] + (((og_sin(a1) * r1) >> 15) * c[3] >> 8), h);
-}
 /* a ring (Q4 units), its sides as many as its size asks */
 static void vx_ring(const vxf_t *f, int32_t x, int32_t y, int32_t rx, int32_t ry, int32_t h)
 {
     uint32_t n = (uint32_t)clamp(((rx + ry) * f->s) >> 12, 8, 28);
     vx_arc(f, x, y, rx, ry, 0, 65536u, n, h);
-}
-/* a bicho's body (isoU): its outer outline (the spikes) of radius r, its inner one ri (0: none); g its features (spikes,
- * their length, wobble, ripple, lobes, sharpness, x stretch) and its place (x, by, squashed sx sy about it) */
-static void vx_body(const vxf_t *f, const vxb_t *g, int32_t r, int32_t ri, uint32_t t, int32_t ho, int32_t hi, uint32_t no, uint32_t ni)
-{
-    if (sys_load) {                                      /* (LITE, ECO) */
-        no = no * (sys_load == LOAD_ECO ? 1u : 2u) / (sys_load == LOAD_ECO ? 2u : 3u);
-        ni = ni * (sys_load == LOAD_ECO ? 1u : 2u) / (sys_load == LOAD_ECO ? 2u : 3u);
-    }
-    vx_blob(f, g, r, 1, t, no, ho);
-    if (ri) vx_blob(f, g, ri, 0, t, ni, hi);
 }
 /* text s centred on (x, its capitals' top y) Q4 px */
 static void vx_text(int32_t x, int32_t y, const char *s, uint16_t c)
@@ -941,71 +897,6 @@ static int32_t vx_x2(int32_t l)
 {
     int32_t i = l >> 8, f = l & 255, m = 4096 + ((f * (2690 + ((f * 1407) >> 8))) >> 8);
     return i >= 0 ? m << i : i > -31 ? m >> -i : 0;
-}
-/* a wave of ANALOG's at phase q (16 bit): SAW SQR TRI SIN */
-static int32_t vx_anb(uint32_t w, uint32_t q)
-{
-    q &= 65535u;
-    w &= 3u;
-    return w == 0u ? 32767 - (int32_t)q : w == 1u ? (q < 32768u ? 32767 : -32767) :
-           w == 2u ? (q < 32768u ? (int32_t)q * 2 - 32768 : 98303 - (int32_t)q * 2) : og_sin(q);
-}
-/* two cycles (64 samples each) of ANALOG's oscillators, noise, the filter (CUT on the note, the envelope opening it a
- * little, RES) and DRIVE (tanh), as the mock-up's anTick: into vxs.wv, normalised (Q12) */
-static VX_CODE void vx_an_wave(const track_t *t, int32_t en, uint32_t mt, int32_t note)
-{
-    const int16_t *p = t->p;
-    uint32_t w = (uint32_t)p[P_E0] & 7u, i, rep, r = 4096, rs = (mt >> 8) * 2654435761u + 1u;
-    int32_t det = p[P_E1], mix = (p[P_E2] * 516 >> 8), nz = (p[P_E3] * 361 >> 8), mo = clamp(t->mo_cur / 127, 0, 256), k;
-    int32_t pos = (int32_t)w * 256 + mo * 3, fr = pos & 255, i0 = pos >> 8, g, a1, a2, a3, ic1 = 0, ic2 = 0, mx = 1, dg;
-    int32_t r5 = 256 + det * 2022 / 127 * (256 - mo / 2) / 256 + mo * 3, d3 = det * 218 * (256 + 4 * mo) >> 8;
-    uint32_t dr = mt * (uint32_t)det * 2642u >> 16, inc2, wd;
-    for (k = p[P_E7]; k > 0; k--) r = (r * 4340u) >> 12;   /* INT: osc 2 semitones away, DETUNE cents */
-    for (k = p[P_E7]; k < 0; k++) r = (r * 3866u) >> 12;
-    r += r * (uint32_t)det / 1200u;
-    inc2 = 1024u * r >> 12;
-    wd = (uint32_t)(32768 - (mo * 27525 >> 8) - ((og_sin(vx_ang(mt, 50)) * 3932) >> 15));   /* PWM's width */
-    g = vx_x2(-992 - 1536 + ((p[P_E4] * 4851) >> 8) - (note - 69) * 256 / 12 + (en * 82 >> 8));   /* CUT / the note / 64 */
-    g = clamp(g, 4, 1843);
-    g = (g * 12868) >> 12;                               /* (tan (pi fc)) */
-    g = clamp(g + (((((g * g) >> 12) * g) >> 12) / 3), 1, 12288);
-    k = 8192 - (p[P_E5] * 16017 >> 8);
-    a1 = (4096 * 4096) / (4096 + ((g * (g + k)) >> 12));
-    a2 = (g * a1) >> 12;
-    a3 = (g * a2) >> 12;
-    dg = 256 + (p[P_E6] * 3612 >> 8);
-    for (rep = 0; rep < 2u; rep++)                       /* (a cycle for the filter to settle, then the two) */
-        for (i = rep ? 0u : 64u; i < 128u; i++) {
-            uint32_t P = i * 1024u, q = P & 65535u, q2 = (i * inc2 + dr) & 65535u;
-            int32_t s, v1, v2, v3, u;
-            if (w < 4u) {
-                int32_t x1 = (vx_anb((uint32_t)i0, q) * (256 - fr) + vx_anb((uint32_t)i0 + 1u, q) * fr) >> 8;
-                int32_t x2 = (vx_anb((uint32_t)i0, q2) * (256 - fr) + vx_anb((uint32_t)i0 + 1u, q2) * fr) >> 8;
-                s = (x1 * (256 - mix / 2) + x2 * (mix / 2)) >> 8;
-            } else if (w == 4u)
-                s = ((q < wd ? 32767 : -32767) * (256 - mix / 2) + (q2 < wd ? 32767 : -32767) * (mix / 2)) >> 8;
-            else if (w == 5u)
-                s = (vx_anb(0, q) * (256 - mix) + vx_anb(0, (q * (uint32_t)r5) >> 8) * mix) >> 8;
-            else if (w == 6u)
-                s = (vx_anb(0, q) * (256 - mix) + ((vx_anb(0, q) * og_sin((P * (uint32_t)r5) >> 8)) >> 15) * mix) >> 8;
-            else
-                s = (vx_anb(0, P) + vx_anb(0, P + (((P >> 4) * (uint32_t)d3) >> 12) + dr) +
-                     vx_anb(0, P - (((P >> 4) * (uint32_t)d3) >> 12) - dr * 13u / 10u)) / 3;
-            rs ^= rs << 13; rs ^= rs >> 17; rs ^= rs << 5;
-            s = (s + ((((int32_t)(rs >> 16) - 32768) * nz) >> 7)) >> 3;   /* (NOISE) Q12 */
-            v3 = s - ic2;
-            v1 = (a1 * ic1 + a2 * v3) >> 12;
-            v2 = ic2 + ((a2 * ic1 + a3 * v3) >> 12);
-            ic1 = clamp(2 * v1 - ic1, -150000, 150000);
-            ic2 = clamp(2 * v2 - ic2, -150000, 150000);
-            if (!rep) continue;
-            u = clamp(((v2 * dg) >> 8) >> 4, -768, 768);   /* DRIVE: tanh, Q8 */
-            u = u * (1769472 + u * u) / (1769472 + 9 * u * u);
-            vxs.wv[i] = (int16_t)(u << 4);
-            mx = u << 4 > mx ? u << 4 : -(u << 4) > mx ? -(u << 4) : mx;
-        }
-    if (mx > 205)
-        for (i = 0; i < 128u; i++) vxs.wv[i] = (int16_t)(vxs.wv[i] * 4096 / mx);
 }
 /* (BRUSSELS) MANNEKEN, the ANALOG creature: Manneken-Pis big and centred, twinkling sky behind him,
  * and the 4 MS-20 patch cables plugged straight into his extremities (shoulder, elbow, head, hand, feet). */
@@ -1375,7 +1266,7 @@ static VX_CODE void vx_wheel(const track_t *t, const int32_t *A, int32_t en_home
     const int16_t *p = t->p;
     const drw_trk_t *T = &drw_t[drw_part(t)];
     vxf_t f = vx_uf(A, 100, 0);
-    uint32_t n0 = vxs.nms[5], mt = vxs.mt[5], i, j;
+    uint32_t n0 = vxs.nms[5], mt = vxs.mt[5], i;
     int32_t en = vx_level(t, 5, en_home), dr = (p[P_E6] * 516 >> 8), hb = (dr * 56 >> 8), perc = 0, pk, dep, click = (p[P_E5] * 516 >> 8), nf;
     uint32_t age = vx_age(t, 5, 0), pc = (uint32_t)p[P_E4] % 7u;
     vxs.kc = 1;
@@ -1530,14 +1421,14 @@ static VX_CODE void vx_noise(const track_t *t, const int32_t *A, int32_t en_home
         int32_t vx = q[2], vy = q[3], av = vx < 0 ? -vx : vx, bv = vy < 0 ? -vy : vy, v = (av > bv ? av + bv * 3 / 8 : bv + av * 3 / 8) + 1;
         int32_t s = v < 3 * 256 ? v : 3 * 256, x = q[0] / 16, y = q[1] / 16;
         int32_t c = q[4] > 51 ? 218 + (q[4] * 38 >> 8) : clamp(110 + (s * 40 >> 8) + (en * 46 >> 8), 0, 179);
-        int32_t fl = (og_sin(vx_ang(mt, 467) + (uint32_t)i * 17731u) + 32768) >> 8, dy = (20 * fl) >> 8, wd = 36;
+        int32_t fl = (og_sin(vx_ang(mt, 467) + (uint32_t)i * 17731u) + 32768) >> 8, dy = (22 * fl) >> 8, wd = 44;
         vx_line(&f, x - wd, y - dy, x, y, c);
         vx_line(&f, x, y, x + wd, y - dy, c);
     }
-    if (peak > 51) {                                     /* PEAK: the ring they keep */
-        int32_t rp = (12 * 16 + p[P_E2] * 26 * 16 / 127);
-        vxs.dal = (int16_t)(256 - peak / 2);
-        vx_ring(&f, 0, 0, rp, rp, 77 + (peak * 102 >> 8));
+    if (peak > 51) {                                     /* PEAK: subtle wind ring */
+        int32_t rp = (14 * 16 + p[P_E2] * 20 * 16 / 127);
+        vxs.dal = (int16_t)(256 - peak / 3);
+        vx_ring(&f, 0, 0, rp, rp, 96 + (peak * 64 >> 8));
         vxs.dal = 0;
     }
     {   /* the street lamp breathes with the level; the pigeons and the rain stay where they fly */
@@ -1556,8 +1447,8 @@ static VX_CODE void vx_noise(const track_t *t, const int32_t *A, int32_t en_home
         vx_line(&f, rf[0], rf[1], rf[2], rf[3], hc - 20);
         vx_line(&f, rf[2], rf[3], rf[4], rf[5], hc - 20);
         vx_dot(&f, 0, -20 * 8, 19, hc);
-        vxs.dal = (int16_t)(256 - (30 + (en * 77 >> 8)));
-        vx_ring(&f, 0, 16, (20 * 8) + (en * 32 >> 8), (20 * 8) + (en * 32 >> 8), 220);
+        vxs.dal = (int16_t)(256 - (42 + (en * 68 >> 8)));
+        vx_ring(&f, 0, 16, (14 * 8) + (en * 24 >> 8), (14 * 8) + (en * 24 >> 8), 210);
         vxs.dal = 0;
         vx_bface(&f, 0, 3 * 8, 72, (en * 307 >> 8), age < 90u, 0);
         f.cx = ocx;
@@ -1609,7 +1500,7 @@ static void ph_pt(int32_t x, int32_t y, int32_t ang, int32_t *ox, int32_t *oy)
 }
 static VX_CODE void vx_phase(const track_t *t, const int32_t *A, int32_t en_home)
 {
-    vxf_t f = vx_uf(A, 110, 48);
+    vxf_t f = vx_uf(A, 104, 128);
     int32_t en = vx_level(t, 7, en_home), i, k, q[2 * 27], h;
     uint32_t mt = vxs.mt[7];
     (void)vx_age(t, 7, 0);                               /* (the note's time, kept current) */
@@ -1627,7 +1518,7 @@ static VX_CODE void vx_phase(const track_t *t, const int32_t *A, int32_t en_home
         vxs.ph_young = young;
     }
     int32_t di = vxs.ph_di, face = di == 0 ? -1 : di == 2 ? 1 : 0, ang;
-    static const int32_t TX[3] = {36, 150, 214}, TY[3] = {199, 172, 168};   /* the targets: the puddle, the Atomium, the tree */
+    static const int32_t TX[3] = {36, 150, 214};   /* the targets: the puddle, the Atomium, the tree */
     int32_t x0 = 87 + face * 6, tgt = TX[di], Lx = tgt - x0;
     int32_t flow = 115 + en * 141 / 256;                /* Q8: the jet's strength with the level */
     int32_t H = (16 + (Lx < 0 ? -Lx : Lx) * 32 / 100) * flow / 256;   /* the jet's height, px */
@@ -1865,13 +1756,13 @@ static VX_CODE void vx_lofi(const track_t *t, const int32_t *A, int32_t en_home)
     vxsk_t sk;
     int32_t a0 = A[2] * 256 / 124, b0 = (A[3] - 4) * 256 / 94, w = p[P_E1], chip = p[P_E0], BF, step, hold, fresh;
     uint32_t gap = ui.frame - vxs.fr[8], dm = fm1_ms - vxs.ms[8], new_fr = gap != 0u;
-    int32_t en, i, j, k, row, m, e1, pk = 6000, jsc, nt, amp, px, vb, wr = 56, bob, sx, cx0, cy0, sc, bp[14], wq[8];
-    int32_t rx[41], ry[41], sv[41], xc, v;
+    int32_t en, i, j, k, row, m, e1, pk = 6000, jsc, nt, amp, px, vb, wr = 56, bob, sx, sc, bp[14], wq[8];
+    int32_t rx[41], ry[41], sv[41];
     uint32_t mt, age, w0 = scope_w - 256u, byte = 0, cr, tt = 0, o, tc;
     vxf_t g;
-    L.f.s = (a0 < b0 ? a0 : b0) * 112 / 100;
+    L.f.s = (a0 < b0 ? a0 : b0) * 106 / 100;
     L.f.cx = (A[0] * 2 + A[2]) * 8 - ((32 * L.f.s) >> 8);
-    L.f.cy = (A[1] * 2 + A[3]) * 8;
+    L.f.cy = (A[1] * 2 + A[3]) * 8 + 112;
     vxs.kc = 1;
     L.B = w == RW_BYTE;                                  /* the knobs, as the slots mean them now */
     L.F = w == RW_FLOAT;
