@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRUSSELS — M-VAVE FM-1 Manual</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-subtle: #f7f7f8;
+  --border: #e6e6ea;
+  --border-strong: #d0d0d8;
+  --text: #151518;
+  --muted: #5d5d68;
+  --dim: #8c8c98;
+  --accent: #c73244;
+  --link: #1f5fd6;
+  --warn-border: #d4962a;
+  --tip-border: #2c8f62;
+
+  /* Hardware drawing tokens (light theme = clean technical blueprint) */
+  --hw-body: #f5f5f7;
+  --hw-stroke: #cfcfe0;
+  --hw-tray: #ececf1;
+  --hw-part: #ffffff;
+  --hw-part-stroke: #c4c4cf;
+  --hw-label: #3a3a44;
+  --hw-key: #e4e4ec;
+  --hw-key-stroke: #c4c4d0;
+  --hw-slit: #ffffff;
+  --hw-screen-bd: #1c1c20;
+
+  --font: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+}
+
+html[data-theme="dark"] {
+  --bg: #141416;
+  --bg-subtle: #1b1b1f;
+  --border: #27272e;
+  --border-strong: #393944;
+  --text: #ececf0;
+  --muted: #a0a0ae;
+  --dim: #6f6f7d;
+  --accent: #e45868;
+  --link: #7ba6f7;
+  --warn-border: #cfa042;
+  --tip-border: #4ab685;
+
+  --hw-body: #1d1d21;
+  --hw-stroke: #34343e;
+  --hw-tray: #151518;
+  --hw-part: #2a2a31;
+  --hw-part-stroke: #444450;
+  --hw-label: #d4d4de;
+  --hw-key: #202026;
+  --hw-key-stroke: #3d3d48;
+  --hw-slit: #9a9aa8;
+  --hw-screen-bd: #0a0a0c;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+html[data-lang="en"] [data-fr] { display: none !important; }
+html[data-lang="fr"] [data-en] { display: none !important; }
+
+/* Minimal top bar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 24px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+.brand-name {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+.brand-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.top-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 3px 6px;
+}
+.top-link:hover { color: var(--text); }
+
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.seg button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 4px 9px;
+  cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button.active {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* Two-column editorial layout */
+.layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 48px;
+  padding: 36px 24px 96px;
+}
+
+nav.doc-contents {
+  position: sticky;
+  top: 68px;
+  align-self: start;
+  max-height: calc(100vh - 92px);
+  overflow-y: auto;
+  padding-right: 12px;
+}
+.toc-title {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  margin: 0 0 10px;
+}
+nav.doc-contents a {
+  display: block;
+  padding: 4px 0;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 1.45;
+}
+nav.doc-contents a:hover { color: var(--text); }
+nav.doc-contents a.sub {
+  padding-left: 12px;
+  font-size: 12.2px;
+  color: var(--dim);
+}
+nav.doc-contents a.sub:hover { color: var(--text); }
+
+main { min-width: 0; }
+
+/* Intro — completely flat, no box */
+.intro {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+h1 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+.lead {
+  margin: 0;
+  color: var(--muted);
+  max-width: 64ch;
+  font-size: 15.5px;
+}
+
+/* Sections & headings */
+section {
+  margin: 48px 0;
+  scroll-margin-top: 68px;
+}
+h2 {
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.01em;
+}
+h3 {
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 24px 0 8px;
+}
+p { max-width: 65ch; margin: 0 0 12px; }
+ul, ol { max-width: 65ch; padding-left: 20px; margin: 0 0 14px; }
+li { margin-bottom: 5px; }
+a { color: var(--link); }
+
+/* Light, minimal inline tokens */
+kbd, .knob, .scr {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 1px 6px;
+  border-radius: 4px;
+  vertical-align: 0.5px;
+  white-space: nowrap;
+}
+kbd {
+  border: 1px solid var(--border-strong);
+  background: var(--bg-subtle);
+  color: var(--text);
+  font-weight: 600;
+}
+.knob {
+  border: 1px solid var(--border-strong);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
+}
+.scr {
+  background: var(--bg-subtle);
+  color: var(--text);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Thin left-bar notes (no heavy boxes) */
+.note {
+  border-left: 2px solid var(--border-strong);
+  padding: 2px 0 2px 14px;
+  margin: 16px 0;
+  max-width: 65ch;
+  color: var(--muted);
+  font-size: 14px;
+}
+.note.warn { border-left-color: var(--warn-border); }
+.note.tip  { border-left-color: var(--tip-border); }
+.note strong { color: var(--text); }
+
+/* Quick start steps — clean numbered rows, no cards */
+.steps {
+  margin-top: 16px;
+}
+.step {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.step:last-child { border-bottom: 0; }
+.step-num {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  padding-top: 2px;
+}
+.step h3 { margin: 0 0 4px; font-size: 15px; }
+.step p { margin: 0; color: var(--muted); font-size: 14.5px; }
+
+/* Hardware diagram container — flat, transparent */
+.panel-figure {
+  margin: 20px 0 26px;
+}
+.panel-figure svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.panel-caption {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--dim);
+}
+
+/* Screen row: flat 240x240 image + text/table right beside it */
+.screen-row {
+  display: grid;
+  grid-template-columns: 242px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+}
+.screen-row:last-child { border-bottom: 0; }
+.screen-fig { margin: 0; }
+.screen-fig img {
+  display: block;
+  width: 240px;
+  height: 240px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: #fff;
+}
+.screen-fig figcaption {
+  margin-top: 7px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+.screen-body h3 { margin-top: 0; }
+.how-open {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+/* Clean hairline tables */
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.8px;
+}
+th, td {
+  text-align: left;
+  padding: 8px 10px 8px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+}
+tr:last-child td { border-bottom: 0; }
+.compact td, .compact th { padding: 6px 10px 6px 0; font-size: 13.5px; }
+
+/* Two-column flat list for Reading the Screen */
+.cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 32px;
+  margin: 14px 0 24px;
+}
+.cols-2 h3 { margin: 0 0 4px; font-size: 14.5px; }
+.cols-2 p { margin: 0; font-size: 14px; color: var(--muted); }
+
+/* Minimal filter tabs */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 10px;
+}
+.chip {
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+}
+.chip.active {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+.tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+
+footer {
+  margin-top: 56px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--dim);
+  font-size: 12.5px;
+}
+
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; gap: 20px; padding-top: 20px; }
+  nav.doc-contents {
+    position: static;
+    max-height: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    padding: 0 0 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .toc-title { width: 100%; margin-bottom: 4px; }
+  nav.doc-contents a.sub { padding-left: 0; }
+  .screen-row { grid-template-columns: 1fr; gap: 16px; }
+  .cols-2 { grid-template-columns: 1fr; }
+}
+@media print {
+  .topbar, nav.doc-contents, .filters { display: none; }
+  .layout { display: block; max-width: 100%; padding: 0; }
+  .screen-row, .step { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#top">
+    <span class="brand-name">BRUSSELS</span>
+    <span class="brand-sub" data-en>M-VAVE FM-1 Manual</span>
+    <span class="brand-sub" data-fr>Mode d'emploi M-VAVE FM-1</span>
+  </a>
+  <div class="top-actions">
+    <a class="top-link" href="/emu/" target="_blank" rel="noopener">
+      <span data-en>Emulator</span><span data-fr>Émulateur</span>
+    </a>
+    <a class="top-link" href="/webapp/installer/" target="_blank" rel="noopener">
+      <span data-en>Installer</span><span data-fr>Installeur</span>
+    </a>
+    <div class="seg" role="group" aria-label="Theme">
+      <button type="button" id="btn-light" class="active" onclick="setTheme('light')">Light</button>
+      <button type="button" id="btn-dark" onclick="setTheme('dark')">Dark</button>
+    </div>
+    <div class="seg" role="group" aria-label="Language">
+      <button type="button" id="btn-en" class="active" onclick="setLang('en')">EN</button>
+      <button type="button" id="btn-fr" onclick="setLang('fr')">FR</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout" id="top">
+
+<nav class="doc-contents" aria-label="Contents">
+  <div class="toc-title" data-en>Contents</div>
+  <div class="toc-title" data-fr>Sommaire</div>
+
+  <a href="#quickstart"><span data-en>1A. Quick Start: Play, Record &amp; Save</span><span data-fr>1A. Démarrer : Jouer, Enregistrer, Sauver</span></a>
+  <a href="#quickstart-synth"><span data-en>1B. Quick Start: Synth &amp; Envelopes</span><span data-fr>1B. Bases du synthé &amp; enveloppes</span></a>
+  <a href="#panel"><span data-en>2. Exact FM-1 Layout</span><span data-fr>2. Plan exact du FM-1</span></a>
+  <a href="#cheatsheet" class="sub"><span data-en>Do this → Get that</span><span data-fr>Je veux… → Je fais…</span></a>
+  <a href="#screen"><span data-en>3. Reading the Screen</span><span data-fr>3. Lire l'écran</span></a>
+  <a href="#pages"><span data-en>4. Every Screen</span><span data-fr>4. Chaque écran</span></a>
+  <a href="#pg-home" class="sub">HOME</a>
+  <a href="#pg-osc" class="sub">EDIT · OSC</a>
+  <a href="#pg-filter" class="sub">EDIT · FILTER</a>
+  <a href="#pg-vowel" class="sub">EDIT · VOWEL &amp; SUB</a>
+  <a href="#pg-mod" class="sub">LFO · MOD</a>
+  <a href="#pg-env" class="sub">ENV</a>
+  <a href="#pg-seq" class="sub">SEQ</a>
+  <a href="#pg-kit" class="sub">FANFARE / DRUMS</a>
+  <a href="#pg-menu" class="sub"><span data-en>Menu (Hold HOME)</span><span data-fr>Menu (Tenir HOME)</span></a>
+  <a href="#sounds"><span data-en>5. All BRUSSELS Sounds</span><span data-fr>5. Tous les sons</span></a>
+  <a href="#limits"><span data-en>6. Good to Know</span><span data-fr>6. Bon à savoir</span></a>
+  <a href="#install"><span data-en>7. Install &amp; UBOOT</span><span data-fr>7. Installer &amp; UBOOT</span></a>
+</nav>
+
+<main>
+
+<!-- INTRO -->
+<div class="intro">
+  <div class="eyebrow" data-en>BRUSSELS 0.9 · M-VAVE FM-1</div>
+  <div class="eyebrow" data-fr>BRUSSELS 0.9 · M-VAVE FM-1</div>
+  <h1 data-en>Make your first sound &amp; beat</h1>
+  <h1 data-fr>Faire ton premier son et ton premier beat</h1>
+  <p class="lead" data-en>BRUSSELS is a custom firmware for the M-VAVE FM-1 (built on JIANT / Felucca). It adds a heavy MS-20 style analog synth with 4 patch cables, 22 original Brussels sounds, a Belgian New Beat drum kit, and crisp white-mode screens. Just where to press and what you hear.</p>
+  <p class="lead" data-fr>BRUSSELS est un programme personnalisé pour le M-VAVE FM-1 (basé sur JIANT / Felucca). Il ajoute un gros synthé analogique esprit MS-20 avec 4 câbles, 22 sons originaux de Bruxelles, une batterie New Beat et un écran clair. Juste où appuyer et ce que tu entends.</p>
+</div>
+
+<div class="note warn">
+  <p style="margin:0" data-en><strong>Before installing on a real FM-1:</strong> use Chrome, Brave, or Edge (Safari has no WebMIDI). Keep a copy of the stock M-VAVE <code>FM-1.fwsc</code> file. If an update ever stops halfway, hold <kbd>OCT−</kbd> + <kbd>OCT+</kbd> for 5 seconds to enter <span class="scr">UBOOT</span> recovery.</p>
+  <p style="margin:0" data-fr><strong>Avant d'installer sur un vrai FM-1 :</strong> utilise Chrome, Brave ou Edge (Safari n'a pas WebMIDI). Garde le fichier M-VAVE <code>FM-1.fwsc</code> d'origine. Si une mise à jour s'interrompt, tiens <kbd>OCT−</kbd> + <kbd>OCT+</kbd> pendant 5 secondes pour ouvrir le mode secours <span class="scr">UBOOT</span>.</p>
+</div>
+
+<!-- 1A. QUICK START: PLAY, RECORD, LENGTH, ERASE, SAVE (ZERO JARGON) -->
+<section id="quickstart">
+  <h2 data-en>1A. Quick Start — Play, Record, Erase &amp; Save (No Synth Knowledge Needed)</h2>
+  <h2 data-fr>1A. Démarrer — Jouer, Enregistrer, Effacer &amp; Sauver (zéro jargon synthé)</h2>
+  <p data-en>Never used a synthesizer before? Start here. Words in <span class="scr">CAPITALS</span> match the screen. Rounded tags like <span class="knob">PRESETS</span> are knobs you turn. Square tags like <kbd>REC</kbd> are buttons you press.</p>
+  <p data-fr>Tu n'as jamais touché un synthé ? Commence ici. Les mots en <span class="scr">MAJUSCULES</span> sont ceux de l'écran. Les pastilles rondes comme <span class="knob">PRESETS</span> sont des molettes à tourner. Les touches carrées comme <kbd>REC</kbd> sont des boutons à appuyer.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div>
+        <h3 data-en>Pick a track and a sound</h3>
+        <h3 data-fr>Choisir une piste et un son</h3>
+        <p data-en>Turn <span class="knob">ALGORITHM</span> (left of the screen) to pick a track from <span class="scr">T1</span> to <span class="scr">T6</span> (<span class="scr">T1</span> is drums, <span class="scr">T2</span> is <span class="scr">MANNEKEN</span> bass/synth). Turn <span class="knob">PRESETS</span> to pick a sound (try <span class="scr">FRITES</span> or <span class="scr">NEW BEAT</span>). Play the bottom keys.</p>
+        <p data-fr>Tourne <span class="knob">ALGORITHM</span> (à gauche de l'écran) pour choisir une piste de <span class="scr">T1</span> à <span class="scr">T6</span> (<span class="scr">T1</span> = batterie, <span class="scr">T2</span> = synthé <span class="scr">MANNEKEN</span>). Tourne <span class="knob">PRESETS</span> pour choisir un son (essaie <span class="scr">FRITES</span> ou <span class="scr">NEW BEAT</span>). Joue sur les touches en bas.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div>
+        <h3 data-en>Record a sequence live</h3>
+        <h3 data-fr>Enregistrer une séquence en direct</h3>
+        <p data-en>Press <kbd>PLAY/STOP</kbd> to start the loop, then press <kbd>REC</kbd>. Play your beat or melody on the keys — it records straight into the loop. Press <kbd>REC</kbd> again when you want to stop recording while keeping the loop playing.</p>
+        <p data-fr>Appuie sur <kbd>PLAY/STOP</kbd> pour lancer la boucle, puis sur <kbd>REC</kbd>. Joue ton rythme ou ta mélodie sur les touches : tout s'enregistre en direct. Rappuie sur <kbd>REC</kbd> pour arrêter d'enregistrer tout en laissant la boucle tourner.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div>
+        <h3 data-en>Choose the number of steps: 1 to 64 steps per track</h3>
+        <h3 data-fr>Choisir le nombre de pas : de 1 à 64 pas par piste</h3>
+        <p data-en>By default each track loops over <strong>16 steps</strong> (1 bar). You can stretch any track up to <strong>64 steps</strong> (4 bars): press <kbd>SEQ</kbd> to open <span class="scr">PATTERN</span> (or <strong>hold <kbd>SEQ</kbd></strong> anywhere) and turn <span class="knob">KNOB 1</span> (<span class="scr">LEN</span>) to pick 16, 32, 48, 64 — or any number from 1 to 64. On <span class="scr">SEQ → STEP</span>, <span class="knob">KNOB 1</span> scrolls through all 64 steps (shown 16 at a time). Each of the 6 tracks can have its own length.</p>
+        <p data-fr>Par défaut chaque piste tourne sur <strong>16 pas</strong> (1 mesure). Tu peux l'allonger jusqu'à <strong>64 pas</strong> (4 mesures) : appuie sur <kbd>SEQ</kbd> sur la page <span class="scr">PATTERN</span> (ou <strong>tiens <kbd>SEQ</kbd></strong> depuis n'importe où) et tourne <span class="knob">KNOB 1</span> (<span class="scr">LEN</span>) sur 16, 32, 48, 64 — ou n'importe quel chiffre de 1 à 64. Sur <span class="scr">SEQ → STEP</span>, <span class="knob">KNOB 1</span> parcourt tous les 64 pas (affichés 16 par 16). Chaque piste peut avoir sa propre longueur.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">04</div>
+      <div>
+        <h3 data-en>Switch between sequences (<span class="scr">A</span>, <span class="scr">B</span>, <span class="scr">C</span>, <span class="scr">D</span>) &amp; build a full song</h3>
+        <h3 data-fr>Changer de séquence (<span class="scr">A</span>, <span class="scr">B</span>, <span class="scr">C</span>, <span class="scr">D</span>) et construire une chanson</h3>
+        <p data-en>One project holds <strong>4 separate sections (<span class="scr">A</span>, <span class="scr">B</span>, <span class="scr">C</span>, <span class="scr">D</span>)</strong> — for example <span class="scr">A</span> = intro, <span class="scr">B</span> = verse, <span class="scr">C</span> = chorus, <span class="scr">D</span> = break. Each section keeps its own 6 tracks (sounds + up to 64 steps).<br>
+        <strong>1. Switch section live (try it on the emulator or FM-1!):</strong> hold <kbd>SAVE</kbd> and tap the first 4 keys to jump between <span class="scr">A</span>, <span class="scr">B</span>, <span class="scr">C</span>, <span class="scr">D</span> — or press <kbd>SAVE</kbd> → <span class="scr">PROJECT</span> and turn <span class="knob">KNOB 1</span>.<br>
+        <strong>2. Load a ready-made pattern onto 1 track:</strong> press <kbd>SEQ</kbd> and turn <span class="knob">PRESETS</span>, then press <kbd>OCT+</kbd> to load (<kbd>OCT−</kbd> cancels).<br>
+        <strong>3. Chain sections into a song:</strong> press <kbd>SAVE</kbd> → turn <span class="knob">SELECT</span> to <span class="scr">ARRANGE</span>. Press <kbd>OCT+</kbd> to add a row (up to 16 rows), pick which section (<span class="scr">A</span>–<span class="scr">D</span>) and how many bars it plays (e.g. <code>A×4 → B×8 → C×4 → A×4</code>), then press <kbd>PLAY/STOP</kbd>.</p>
+        <p data-fr>Un projet contient <strong>4 parties indépendantes (<span class="scr">A</span>, <span class="scr">B</span>, <span class="scr">C</span>, <span class="scr">D</span>)</strong> — par exemple <span class="scr">A</span> = intro, <span class="scr">B</span> = couplet, <span class="scr">C</span> = refrain, <span class="scr">D</span> = break. Chaque partie garde ses propres 6 pistes (sons + jusqu'à 64 pas).<br>
+        <strong>1. Changer de partie en direct (à tester sur l'émulateur ou le FM-1 !) :</strong> tiens <kbd>SAVE</kbd> et appuie sur les 4 premières touches pour sauter entre <span class="scr">A</span>, <span class="scr">B</span>, <span class="scr">C</span> et <span class="scr">D</span> — ou appuie sur <kbd>SAVE</kbd> → <span class="scr">PROJECT</span> et tourne <span class="knob">KNOB 1</span>.<br>
+        <strong>2. Charger une séquence prête sur 1 piste :</strong> appuie sur <kbd>SEQ</kbd> et tourne <span class="knob">PRESETS</span>, puis <kbd>OCT+</kbd> pour charger (<kbd>OCT−</kbd> annule).<br>
+        <strong>3. Enchaîner les parties en vraie chanson :</strong> appuie sur <kbd>SAVE</kbd> → tourne <span class="knob">SELECT</span> sur <span class="scr">ARRANGE</span>. Appuie sur <kbd>OCT+</kbd> pour ajouter une ligne (jusqu'à 16 lignes), choisis la partie (<span class="scr">A</span>–<span class="scr">D</span>) et son nombre de mesures (ex. <code>A×4 → B×8 → C×4 → A×4</code>), puis lance <kbd>PLAY/STOP</kbd>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">05</div>
+      <div>
+        <h3 data-en>Erase a note, clear a track, or delete a song</h3>
+        <h3 data-fr>Effacer une note, vider une piste ou supprimer une partie</h3>
+        <p data-en><strong>Metronome (instant, from any page):</strong> hold <kbd>REC</kbd> + turn <span class="knob">KNOB 1</span> (or press the <strong>2nd white piano key</strong> on the FM-1) to cycle <span class="scr">CLICK</span>: <span class="scr">OFF</span> (silent) / <span class="scr">REC</span> (only while recording) / <span class="scr">ON</span> (always while playing). Volume &amp; count-in: hold <kbd>HOME</kbd> → <span class="scr">AUDIO</span>.<br><strong>Clear only the active track (instant):</strong> hold <kbd>REC</kbd> + press the <strong>1st white piano key</strong> (far left = <span class="scr">CLEAR</span>). Hold <kbd>SEQ</kbd> + <kbd>REC</kbd> to clear all tracks.<br><strong>Erase 1 note:</strong> press <kbd>SEQ</kbd> → <span class="scr">STEP</span> → pick the step with <span class="knob">KNOB 1</span> → turn <span class="knob">KNOB 3</span> (<span class="scr">TIME</span>) to <span class="scr">REST</span> (or hold <kbd>SEQ</kbd> + press the <strong>last white piano key</strong> on the far right).</p>
+        <p data-fr><strong>Métronome (direct, depuis n'importe quelle page) :</strong> maintiens <kbd>REC</kbd> + tourne <span class="knob">KNOB 1</span> (ou appuie sur la <strong>2e touche blanche du clavier du FM-1</strong>) pour basculer <span class="scr">CLICK</span> : <span class="scr">OFF</span> (silencieux) / <span class="scr">REC</span> (seulement en enregistrement) / <span class="scr">ON</span> (toujours actif en lecture). Volume et pré-décompte : maintiens <kbd>HOME</kbd> → <span class="scr">AUDIO</span>.<br><strong>Vider uniquement la piste active (direct) :</strong> maintiens <kbd>REC</kbd> + appuie sur la <strong>1re touche blanche du clavier</strong> (tout à gauche = <span class="scr">CLEAR</span>). Maintiens <kbd>SEQ</kbd> + <kbd>REC</kbd> pour vider toutes les pistes.<br><strong>Effacer 1 note :</strong> <kbd>SEQ</kbd> → <span class="scr">STEP</span> → choisis le pas avec <span class="knob">KNOB 1</span> → tourne <span class="knob">KNOB 3</span> (<span class="scr">TIME</span>) sur <span class="scr">REST</span> (ou maintiens <kbd>SEQ</kbd> + appuie sur la <strong>dernière touche blanche</strong> tout à droite).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">06</div>
+      <div>
+        <h3 data-en>Save a sound &amp; save your song</h3>
+        <h3 data-fr>Sauvegarder un son et sauvegarder ta chanson</h3>
+        <p data-en><strong>Save a sound:</strong> press <kbd>SAVE</kbd> → turn <span class="knob">SELECT</span> to <span class="scr">USER</span> → pick a <span class="scr">SLOT</span> with <span class="knob">KNOB 1</span> → press <kbd>OCT+</kbd> (<span class="scr">SAVE</span>), name it, and confirm with <kbd>OCT+</kbd>. (On the same page you can also <span class="scr">LOAD</span> or <span class="scr">ERASE</span> a saved sound.)<br><strong>Save your whole song:</strong> press <kbd>PLAY/STOP</kbd> to stop playback first, press <kbd>SAVE</kbd> → <span class="scr">PROJECT</span> → pick a <span class="scr">SLOT</span> with <span class="knob">KNOB 1</span> → press <kbd>OCT+</kbd> (<span class="scr">SAVE</span>).</p>
+        <p data-fr><strong>Sauvegarder un son :</strong> appuie sur <kbd>SAVE</kbd> → tourne <span class="knob">SELECT</span> sur <span class="scr">USER</span> → choisis un <span class="scr">SLOT</span> avec <span class="knob">KNOB 1</span> → appuie sur <kbd>OCT+</kbd> (<span class="scr">SAVE</span>), donne-lui un nom et confirme avec <kbd>OCT+</kbd>. (Au même endroit tu peux aussi <span class="scr">LOAD</span> ou <span class="scr">ERASE</span> un son.)<br><strong>Sauvegarder toute ta chanson :</strong> arrête d'abord la lecture (<kbd>PLAY/STOP</kbd>), appuie sur <kbd>SAVE</kbd> → <span class="scr">PROJECT</span> → choisis un <span class="scr">SLOT</span> avec <span class="knob">KNOB 1</span> → appuie sur <kbd>OCT+</kbd> (<span class="scr">SAVE</span>).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 1B. QUICK START: SYNTH & ENVELOPES -->
+<section id="quickstart-synth">
+  <h2 data-en>1B. Quick Start — Shape Your Sound (Synth &amp; Envelopes in 30 Seconds)</h2>
+  <h2 data-fr>1B. Bases du synthé — Sculpter le son et les enveloppes en 30 secondes</h2>
+  <p data-en>Once your loop is playing, use these 4 screens to transform any sound from soft and round to aggressive and alive:</p>
+  <p data-fr>Une fois que ta boucle tourne, utilise ces 4 écrans pour transformer n'importe quel son, du plus rond au plus mordant :</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div>
+        <h3 data-en>Filter: dark &amp; deep vs. bright &amp; acid (<kbd>EDIT</kbd> → <span class="scr">FILTER</span>)</h3>
+        <h3 data-fr>Filtre : sombre &amp; grave ou brillant &amp; acide (<kbd>EDIT</kbd> → <span class="scr">FILTER</span>)</h3>
+        <p data-en>Press <kbd>EDIT</kbd>, turn <span class="knob">SELECT</span> to <span class="scr">FILTER</span>. Turn <span class="knob">KNOB 2</span> (<span class="scr">CUT</span>) left to muffle the sound or right to open it up. Turn <span class="knob">KNOB 4</span> (<span class="scr">RES</span>) up to make the MS-20 filter whistle.</p>
+        <p data-fr>Appuie sur <kbd>EDIT</kbd>, tourne <span class="knob">SELECT</span> sur <span class="scr">FILTER</span>. Tourne <span class="knob">KNOB 2</span> (<span class="scr">CUT</span>) à gauche pour étouffer le son ou à droite pour l'ouvrir. Monte <span class="knob">KNOB 4</span> (<span class="scr">RES</span>) pour faire siffler le filtre MS-20.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div>
+        <h3 data-en>Envelope: short punch vs. slow pad (<kbd>ENV</kbd>)</h3>
+        <h3 data-fr>Enveloppe : coup sec ou nappe lente (<kbd>ENV</kbd>)</h3>
+        <p data-en>Press <kbd>ENV</kbd>. <span class="knob">KNOB 1</span> (<span class="scr">ATK</span>) = how fast the note starts. <span class="knob">KNOB 2</span> (<span class="scr">DEC</span>) = how fast it drops. <span class="knob">KNOB 3</span> (<span class="scr">SUS</span>) = level while you hold the key. <span class="knob">KNOB 4</span> (<span class="scr">REL</span>) = how long the sound fades out after you let go.</p>
+        <p data-fr>Appuie sur <kbd>ENV</kbd>. <span class="knob">KNOB 1</span> (<span class="scr">ATK</span>) = vitesse de départ. <span class="knob">KNOB 2</span> (<span class="scr">DEC</span>) = vitesse de descente. <span class="knob">KNOB 3</span> (<span class="scr">SUS</span>) = volume tant que tu tiens la touche. <span class="knob">KNOB 4</span> (<span class="scr">REL</span>) = longueur de queue quand tu lâches.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div>
+        <h3 data-en>Keep heavy bass underneath (<kbd>EDIT</kbd> → <span class="scr">VOWEL</span> → <span class="scr">SUB</span>)</h3>
+        <h3 data-fr>Garder un gros grave propre en dessous (<kbd>EDIT</kbd> → <span class="scr">VOWEL</span> → <span class="scr">SUB</span>)</h3>
+        <p data-en>On <span class="scr">MANNEKEN</span>, turn <span class="knob">SELECT</span> to <span class="scr">VOWEL</span>. <span class="knob">KNOB 1</span> (<span class="scr">VOWEL</span>) makes the synth talk (A·E·I·O·U); <span class="knob">KNOB 2</span> (<span class="scr">SUB</span>) adds a pure clean sub-bass straight to the output.</p>
+        <p data-fr>Sur <span class="scr">MANNEKEN</span>, tourne <span class="knob">SELECT</span> sur <span class="scr">VOWEL</span>. <span class="knob">KNOB 1</span> (<span class="scr">VOWEL</span>) fait parler le synthé (A·E·I·O·U) ; <span class="knob">KNOB 2</span> (<span class="scr">SUB</span>) ajoute un grave pur directement en sortie.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">04</div>
+      <div>
+        <h3 data-en>Make the sound move by itself (<kbd>LFO</kbd> → <span class="scr">MOD</span>)</h3>
+        <h3 data-fr>Faire bouger le son tout seul (<kbd>LFO</kbd> → <span class="scr">MOD</span>)</h3>
+        <p data-en>Load <span class="scr">PHRASE</span> or <span class="scr">CHAOS BAS</span> and press <kbd>LFO</kbd>. Each of the 4 cables connects a movement (<span class="scr">SRC</span>: <span class="scr">EG</span>, <span class="scr">MG</span>, <span class="scr">HASARD</span>, <span class="scr">CHAOS</span>) to a target (<span class="scr">DEST</span>: <span class="scr">BAS</span>, <span class="scr">HAUT</span>, <span class="scr">VOIX</span>, <span class="scr">PROB</span>). Turn <span class="knob">KNOB 4</span> (<span class="scr">AMT</span>) to dial the amount.</p>
+        <p data-fr>Charge <span class="scr">PHRASE</span> ou <span class="scr">CHAOS BAS</span> et appuie sur <kbd>LFO</kbd>. Chacun des 4 câbles relie une source (<span class="scr">SRC</span> : <span class="scr">EG</span>, <span class="scr">MG</span>, <span class="scr">HASARD</span>, <span class="scr">CHAOS</span>) à une cible (<span class="scr">DEST</span> : <span class="scr">BAS</span>, <span class="scr">HAUT</span>, <span class="scr">VOIX</span>, <span class="scr">PROB</span>). Tourne <span class="knob">KNOB 4</span> (<span class="scr">AMT</span>) pour doser.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. EXACT FM-1 LAYOUT -->
+<section id="panel">
+  <h2 data-en>2. Exact FM-1 Panel Layout</h2>
+  <h2 data-fr>2. Plan exact de la façade du FM-1</h2>
+  <p data-en>Every knob, button, and key below is in the exact spot where it sits on your real M-VAVE FM-1.</p>
+  <p data-fr>Chaque molette, bouton et touche ci-dessous est placé exactement au même endroit que sur ton vrai M-VAVE FM-1.</p>
+
+  <figure class="panel-figure">
+    <svg id="fm1-svg" viewBox="0 0 1000 624" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Exact M-VAVE FM-1 front panel layout"></svg>
+    <figcaption class="panel-caption" data-en>Left: MASTER, SELECT, PRESETS, ALGORITHM, OCT− / OCT+. Center: 240×240 screen. Right: KNOB 1–4 above the 2×6 button grid. Bottom: 27 touch keys (F3–G5).</figcaption>
+    <figcaption class="panel-caption" data-fr>À gauche : MASTER, SELECT, PRESETS, ALGORITHM, OCT− / OCT+. Au centre : écran 240×240. À droite : KNOB 1–4 au-dessus de la grille 2×6 boutons. En bas : 27 touches (Fa3–Sol5).</figcaption>
+  </figure>
+
+  <h3 id="cheatsheet" data-en>Do this → Get that</h3>
+  <h3 data-fr>Je veux… → Je fais…</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span data-en>What you want</span><span data-fr>Ce que tu veux</span></th>
+          <th><span data-en>Where to press / turn</span><span data-fr>Où appuyer / tourner</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span data-en>Master volume</span><span data-fr>Volume général</span></td>
+          <td><span class="knob">MASTER</span> <span data-en>(top left)</span><span data-fr>(en haut à gauche)</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Switch track (<span class="scr">T1</span>–<span class="scr">T6</span>)</span><span data-fr>Changer de piste (<span class="scr">T1</span>–<span class="scr">T6</span>)</span></td>
+          <td><span class="knob">ALGORITHM</span> <span data-en>(works on any screen)</span><span data-fr>(marche depuis n'importe quel écran)</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Load another sound</span><span data-fr>Charger un autre son</span></td>
+          <td><span class="knob">PRESETS</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Step through pages inside a section</span><span data-fr>Passer d'une page à l'autre dans une section</span></td>
+          <td><span class="knob">SELECT</span> <span data-en>(or press the section button again)</span><span data-fr>(ou rappuyer sur le bouton de la section)</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Adjust the 4 values on screen</span><span data-fr>Régler les 4 valeurs à l'écran</span></td>
+          <td><span class="knob">KNOB 1</span> <span class="knob">KNOB 2</span> <span class="knob">KNOB 3</span> <span class="knob">KNOB 4</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Change tempo (BPM)</span><span data-fr>Changer le tempo (BPM)</span></td>
+          <td><span data-en>Hold</span><span data-fr>Tenir</span> <kbd>GLO</kbd> + <span data-en>turn</span><span data-fr>tourner</span> <span class="knob">SELECT</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Shift keyboard octave</span><span data-fr>Monter / descendre d'une octave</span></td>
+          <td><kbd>OCT−</kbd> / <kbd>OCT+</kbd> <span data-en>(under PRESETS &amp; ALGORITHM)</span><span data-fr>(sous PRESETS et ALGORITHM)</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Open / close Machine Menu (colors, MIDI, USB)</span><span data-fr>Ouvrir / fermer le Menu Machine (couleurs, MIDI, USB)</span></td>
+          <td><span data-en>Hold</span><span data-fr>Tenir</span> <kbd>HOME</kbd> (~0.5 s)</td>
+        </tr>
+        <tr>
+          <td><span data-en>Play / stop pattern</span><span data-fr>Lancer / arrêter la boucle</span></td>
+          <td><kbd>PLAY/STOP</kbd></td>
+        </tr>
+        <tr>
+          <td><span data-en>Record live while playing</span><span data-fr>Enregistrer en direct</span></td>
+          <td><kbd>PLAY/STOP</kbd> + <kbd>REC</kbd>, <span data-en>then play keys</span><span data-fr>puis jouer les touches</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Save song or sound</span><span data-fr>Sauvegarder un morceau ou un son</span></td>
+          <td><kbd>SAVE</kbd> + <span class="knob">SELECT</span></td>
+        </tr>
+        <tr>
+          <td><span data-en>Firmware rescue mode (<span class="scr">UBOOT</span>)</span><span data-fr>Mode secours mise à jour (<span class="scr">UBOOT</span>)</span></td>
+          <td><span data-en>Hold</span><span data-fr>Tenir</span> <kbd>OCT−</kbd> + <kbd>OCT+</kbd> <span data-en>for 5 seconds</span><span data-fr>pendant 5 secondes</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 3. READING THE SCREEN -->
+<section id="screen">
+  <h2 data-en>3. Reading the Screen</h2>
+  <h2 data-fr>3. Comment lire l'écran</h2>
+  <p data-en>Every BRUSSELS screen has the same 4 bands from top to bottom:</p>
+  <p data-fr>Chaque écran BRUSSELS suit toujours les mêmes 4 bandes de haut en bas :</p>
+
+  <div class="cols-2">
+    <div>
+      <h3 data-en>1. Top bar</h3>
+      <h3 data-fr>1. Ligne du haut</h3>
+      <p data-en>Pattern number, play/stop icon, <strong>BPM</strong> (<span class="scr">120</span>), track &amp; engine name (<span class="scr">T2 · MANNEKEN</span>), and CPU/battery meter.</p>
+      <p data-fr>Numéro de pattern, lecture/stop, <strong>BPM</strong> (<span class="scr">120</span>), piste et moteur (<span class="scr">T2 · MANNEKEN</span>) et témoin à droite.</p>
+    </div>
+    <div>
+      <h3 data-en>2. Tabs + 4 values</h3>
+      <h3 data-fr>2. Onglets + 4 valeurs</h3>
+      <p data-en>The underlined tab is open. The 4 columns underneath always match <span class="knob">KNOB 1</span> to <span class="knob">KNOB 4</span> from left to right.</p>
+      <p data-fr>L'onglet souligné est actif. Les 4 colonnes dessous correspondent toujours à <span class="knob">KNOB 1</span> → <span class="knob">KNOB 4</span> de gauche à droite.</p>
+    </div>
+    <div>
+      <h3 data-en>3. Live picture</h3>
+      <h3 data-fr>3. Visuel vivant</h3>
+      <p data-en>Engine drawing, filter curve, 4 MS-20 patch cables, ADSR envelope, or step piano roll.</p>
+      <p data-fr>Dessin du moteur, courbe du filtre, les 4 câbles MS-20, enveloppe ADSR ou pas du séquenceur.</p>
+    </div>
+    <div>
+      <h3 data-en>4. Bottom line</h3>
+      <h3 data-fr>4. Ligne tout en bas</h3>
+      <p data-en>Left: current path (e.g. <span class="scr">EDIT · TONE · FILTER</span>). Right: sound name &amp; page number (e.g. <span class="scr">FRITES 3/8</span>).</p>
+      <p data-fr>À gauche : où tu es (<span class="scr">EDIT · TONE · FILTER</span>). À droite : nom du son et page (<span class="scr">FRITES 3/8</span>).</p>
+    </div>
+  </div>
+
+  <h3 data-en>The 8 Sound Engines</h3>
+  <h3 data-fr>Les 8 moteurs de son</h3>
+  <div class="table-wrap">
+    <table class="compact">
+      <thead>
+        <tr>
+          <th><span data-en>On Screen</span><span data-fr>À l'écran</span></th>
+          <th><span data-en>Sound type</span><span data-fr>Type de son</span></th>
+          <th><span data-en>Drawing</span><span data-fr>Dessin</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="scr">MANNEKEN</span></td><td><span data-en>Analog &amp; MS-20 synth (47 sounds, incl. 22 BRUSSELS)</span><span data-fr>Synthé analogique &amp; MS-20 (47 sons dont 22 BRUSSELS)</span></td><td><span data-en>Manneken-Pis + cables</span><span data-fr>Manneken-Pis + câbles</span></td></tr>
+        <tr><td><span class="scr">FANFARE</span></td><td><span data-en>8-piece drum machine (808, 909, NEW BEAT…)</span><span data-fr>Batterie 8 pièces (808, 909, NEW BEAT…)</span></td><td><span data-en>Brussels Fanfare</span><span data-fr>Fanfare bruxelloise</span></td></tr>
+        <tr><td><span class="scr">THEO PISSBOY</span></td><td><span data-en>Phase Distortion synth (incl. <span class="scr">SOUND OF C</span>)</span><span data-fr>Phase Distortion (dont <span class="scr">SOUND OF C</span>)</span></td><td>Théo</td></tr>
+        <tr><td><span class="scr">ATOMIUM</span></td><td><span data-en>6-op FM synth (EPs, bells, basses)</span><span data-fr>Synthé FM 6 opérateurs (pianos, cloches, basses)</span></td><td>Atomium</td></tr>
+        <tr><td><span class="scr">SALADE TOUT</span></td><td><span data-en>Birds, calls &amp; organic synth</span><span data-fr>Oiseaux, appels et sons organiques</span></td><td><span data-en>Birds / creatures</span><span data-fr>Oiseaux / créatures</span></td></tr>
+        <tr><td><span class="scr">SNCB</span></td><td><span data-en>Lo-Fi, Bytebeat &amp; Chiptune</span><span data-fr>Lo-Fi, Bytebeat &amp; Chiptune</span></td><td><span data-en>SNCB train</span><span data-fr>Train SNCB</span></td></tr>
+        <tr><td><span class="scr">GROTE MARKT</span></td><td><span data-en>Tonewheel organ</span><span data-fr>Orgue à roues phoniques</span></td><td><span data-en>Grand-Place gables</span><span data-fr>Pignons Grand-Place</span></td></tr>
+        <tr><td><span class="scr">PLUIE</span></td><td><span data-en>Wind, rain &amp; tape textures</span><span data-fr>Vent, pluie et souffle</span></td><td><span data-en>Rain / pigeons</span><span data-fr>Pluie / pigeons</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 4. EVERY SCREEN -->
+<section id="pages">
+  <h2 data-en>4. Every Screen Explained</h2>
+  <h2 data-fr>4. Chaque écran expliqué</h2>
+
+  <div class="screen-row" id="pg-home">
+    <figure class="screen-fig">
+      <img src="screens/home.png" alt="BRUSSELS HOME screen" width="240" height="240">
+      <figcaption>HOME · ECO</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">HOME</span> — <span data-en>All 6 Tracks at a Glance</span><span data-fr>Tes 6 pistes d'un coup d'œil</span></h3>
+      <div class="how-open"><strong data-en>Open:</strong><strong data-fr>Ouvrir :</strong> <span data-en>Press <kbd>HOME</kbd> once.</span><span data-fr>Appuie une fois sur <kbd>HOME</kbd>.</span></div>
+      <p data-en>Shows your active tracks as Brussels characters (fries cone, Manneken-Pis, Atomium, waffle) moving as they play. <span class="knob">KNOB 1</span>–<span class="knob">KNOB 4</span> control the 4 main knobs of the selected track.</p>
+      <p data-fr>Affiche tes pistes actives sous forme de personnages bruxellois (frites, Manneken-Pis, Atomium, gaufre). <span class="knob">KNOB 1</span> à <span class="knob">KNOB 4</span> contrôlent les 4 réglages principaux de la piste active.</p>
+      <div class="note tip"><strong data-en>Try:</strong><strong data-fr>Essaie :</strong> <span data-en>Turn <span class="knob">SELECT</span> to switch between <span class="scr">ECO</span> (all tracks), <span class="scr">BEING</span> (one big track), and <span class="scr">GEN</span> (instant pattern generator).</span><span data-fr>Tourne <span class="knob">SELECT</span> pour passer entre <span class="scr">ECO</span> (toutes les pistes), <span class="scr">BEING</span> (gros plan) et <span class="scr">GEN</span> (générateur de morceau).</span></div>
+    </div>
+  </div>
+
+  <div class="screen-row" id="pg-osc">
+    <figure class="screen-fig">
+      <img src="screens/edit_osc.png" alt="BRUSSELS EDIT OSC screen" width="240" height="240">
+      <figcaption>EDIT · SOUND · OSC (FRITES)</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">EDIT · OSC</span> — <span data-en>Raw Oscillators</span><span data-fr>Les oscillateurs</span></h3>
+      <div class="how-open"><strong data-en>Open:</strong><strong data-fr>Ouvrir :</strong> <span data-en>Press <kbd>EDIT</kbd> (page 1/8 on <span class="scr">MANNEKEN</span>).</span><span data-fr>Appuie sur <kbd>EDIT</kbd> (page 1/8 sur <span class="scr">MANNEKEN</span>).</span></div>
+      <table class="compact">
+        <tr><td><span class="knob">KNOB 1</span> <span class="scr">WAVE</span></td><td><span data-en>Wave shape (<span class="scr">SAW3</span>, <span class="scr">TRI</span>, <span class="scr">SINE</span>, <span class="scr">PWM</span>…)</span><span data-fr>Forme d'onde (<span class="scr">SAW3</span>, <span class="scr">TRI</span>, <span class="scr">SINE</span>, <span class="scr">PWM</span>…)</span></td></tr>
+        <tr><td><span class="knob">KNOB 2</span> <span class="scr">DETUNE</span></td><td><span data-en>Detunes Osc 2 for a wider, thicker tone</span><span data-fr>Désaccorde l'oscillateur 2 pour épaissir le son</span></td></tr>
+        <tr><td><span class="knob">KNOB 3</span> <span class="scr">MIX</span></td><td><span data-en>Balance between Osc 1 and Osc 2</span><span data-fr>Équilibre entre oscillateur 1 et 2</span></td></tr>
+        <tr><td><span class="knob">KNOB 4</span> <span class="scr">NOISE</span></td><td><span data-en>White noise / breath before the filter</span><span data-fr>Bruit / souffle avant le filtre</span></td></tr>
+      </table>
+      <p class="how-open" style="margin:10px 0 0" data-en>One click right on <span class="knob">SELECT</span> opens <span class="scr">FLT</span> (page 2/8): <span class="scr">CUT</span>, <span class="scr">RES</span>, <span class="scr">DRIVE</span>, <span class="scr">FENV</span>.</p>
+      <p class="how-open" style="margin:10px 0 0" data-fr>Un cran à droite sur <span class="knob">SELECT</span> ouvre <span class="scr">FLT</span> (page 2/8) : <span class="scr">CUT</span>, <span class="scr">RES</span>, <span class="scr">DRIVE</span>, <span class="scr">FENV</span>.</p>
+    </div>
+  </div>
+
+  <div class="screen-row" id="pg-filter">
+    <figure class="screen-fig">
+      <img src="screens/edit_filter.png" alt="BRUSSELS EDIT FILTER MS-20 screen" width="240" height="240">
+      <figcaption>EDIT · TONE · FILTER</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">EDIT · FILTER</span> — <span data-en>MS-20 Filter &amp; <span class="scr">HAUT</span></span><span data-fr>Filtre MS-20 et <span class="scr">HAUT</span></span></h3>
+      <div class="how-open"><strong data-en>Open:</strong><strong data-fr>Ouvrir :</strong> <span data-en>Press <kbd>EDIT</kbd>, turn <span class="knob">SELECT</span> to page 3/8.</span><span data-fr>Appuie sur <kbd>EDIT</kbd>, tourne <span class="knob">SELECT</span> jusqu'à la page 3/8.</span></div>
+      <table class="compact">
+        <tr><td><span class="knob">KNOB 1</span> <span class="scr">TYPE</span></td><td><span data-en>Filter type (<span class="scr">MS20</span> is the biting BRUSSELS filter)</span><span data-fr>Type de filtre (<span class="scr">MS20</span> est le filtre mordant BRUSSELS)</span></td></tr>
+        <tr><td><span class="knob">KNOB 2</span> <span class="scr">CUT</span></td><td><span data-en>Lowpass cutoff (left = dark, right = bright)</span><span data-fr>Coupure passe-bas (gauche = sombre, droite = clair)</span></td></tr>
+        <tr><td><span class="knob">KNOB 3</span> <span class="scr">HAUT</span></td><td><span data-en>Highpass before MS-20 (<span class="scr">OFF</span> = full bass)</span><span data-fr>Coupe-haut avant le MS-20 (<span class="scr">OFF</span> = tout le grave)</span></td></tr>
+        <tr><td><span class="knob">KNOB 4</span> <span class="scr">RES</span></td><td><span data-en>Resonance peak — screams above 60%</span><span data-fr>Résonance — siffle au-dessus de 60 %</span></td></tr>
+      </table>
+      <p class="how-open" style="margin:10px 0 0" data-en>Each note of a chord has its own dedicated MS-20 filter.</p>
+      <p class="how-open" style="margin:10px 0 0" data-fr>Chaque note d'un accord dispose de son propre filtre MS-20.</p>
+    </div>
+  </div>
+
+  <div class="screen-row" id="pg-vowel">
+    <figure class="screen-fig">
+      <img src="screens/edit_vowel.png" alt="BRUSSELS EDIT VOWEL and SUB screen" width="240" height="240">
+      <figcaption>EDIT · TONE · VOWEL &amp; SUB (SOUS SOL)</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">EDIT · VOWEL</span> — <span data-en>Mouth Filter &amp; Clean <span class="scr">SUB</span></span><span data-fr>Voyelle et <span class="scr">SUB</span> droit</span></h3>
+      <div class="how-open"><strong data-en>Open:</strong><strong data-fr>Ouvrir :</strong> <span data-en>Press <kbd>EDIT</kbd>, turn <span class="knob">SELECT</span> to page 4/8.</span><span data-fr>Appuie sur <kbd>EDIT</kbd>, tourne <span class="knob">SELECT</span> jusqu'à la page 4/8.</span></div>
+      <table class="compact">
+        <tr><td><span class="knob">KNOB 1</span> <span class="scr">VOWEL</span></td><td><span data-en>Mouth shape A · E · I · O · U (<span class="scr">0%</span> = off)</span><span data-fr>Bouche A · E · I · O · U (<span class="scr">0%</span> = éteint)</span></td></tr>
+        <tr><td><span class="knob">KNOB 2</span> <span class="scr">SUB</span></td><td><span data-en>Pure sine sub added <strong>after</strong> all filters — stays heavy even with high <span class="scr">HAUT</span> or <span class="scr">VOWEL</span></span><span data-fr>Grave pur ajouté <strong>après</strong> les filtres — reste lourd même avec <span class="scr">HAUT</span> ou <span class="scr">VOWEL</span> monté</span></td></tr>
+      </table>
+      <div class="note tip"><strong data-en>Try:</strong><strong data-fr>Essaie :</strong> <span data-en>Load <span class="scr">SOUS SOL</span> and sweep <span class="knob">KNOB 2</span> (<span class="scr">SUB</span>) from 0% to 72% while holding a low note.</span><span data-fr>Charge <span class="scr">SOUS SOL</span> et tourne <span class="knob">KNOB 2</span> (<span class="scr">SUB</span>) de 0 % à 72 % sur une note grave.</span></div>
+    </div>
+  </div>
+
+  <div class="screen-row" id="pg-mod">
+    <figure class="screen-fig">
+      <img src="screens/lfo_mod.png" alt="BRUSSELS LFO MOD 4 cables screen" width="240" height="240">
+      <figcaption>LFO · MOD · 4 CABLES (PHRASE)</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">LFO · MOD</span> — <span data-en>4 MS-20 Patch Cables</span><span data-fr>Les 4 câbles MS-20</span></h3>
+      <div class="how-open"><strong data-en>Open:</strong><strong data-fr>Ouvrir :</strong> <span data-en>Press <kbd>LFO</kbd> (page 1/6).</span><span data-fr>Appuie sur <kbd>LFO</kbd> (page 1/6).</span></div>
+      <table class="compact">
+        <tr><td><span class="knob">KNOB 1</span> <span class="scr">SLOT</span></td><td><span data-en>Pick cable <span class="scr">1/4</span> to <span class="scr">4/4</span></span><span data-fr>Choisit le câble <span class="scr">1/4</span> à <span class="scr">4/4</span></span></td></tr>
+        <tr><td><span class="knob">KNOB 2</span> <span class="scr">SRC</span></td><td><span data-en>Movement: <span class="scr">EG</span>, <span class="scr">MG</span>, <span class="scr">HASARD</span> (step dice), <span class="scr">ROSE</span> (pink drift), <span class="scr">EUCL</span> (3-in-8), <span class="scr">CHAOS</span></span><span data-fr>Source : <span class="scr">EG</span>, <span class="scr">MG</span>, <span class="scr">HASARD</span> (dé par pas), <span class="scr">ROSE</span> (dérive), <span class="scr">EUCL</span> (3-dans-8), <span class="scr">CHAOS</span></span></td></tr>
+        <tr><td><span class="knob">KNOB 3</span> <span class="scr">DEST</span></td><td><span data-en>Target: <span class="scr">BAS</span> (lowpass), <span class="scr">HAUT</span> (highpass), <span class="scr">NOTE</span>, <span class="scr">VOIX</span> (vowel), <span class="scr">PROB</span> (dice odds!)</span><span data-fr>Cible : <span class="scr">BAS</span> (passe-bas), <span class="scr">HAUT</span> (coupe-haut), <span class="scr">NOTE</span>, <span class="scr">VOIX</span> (voyelle), <span class="scr">PROB</span> (chance du dé !)</span></td></tr>
+        <tr><td><span class="knob">KNOB 4</span> <span class="scr">AMT</span></td><td><span data-en>Depth (<span class="scr">0%</span> = off, <span class="scr">+</span> forward, <span class="scr">−</span> inverted)</span><span data-fr>Force (<span class="scr">0%</span> = éteint, <span class="scr">+</span> normal, <span class="scr">−</span> inversé)</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="screen-row" id="pg-env">
+    <figure class="screen-fig">
+      <img src="screens/env.png" alt="BRUSSELS ENV ADSR screen" width="240" height="240">
+      <figcaption>ENV · ADSR</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">ENV</span> — <span data-en>Note Shape (ADSR)</span><span data-fr>Forme de la note (ADSR)</span></h3>
+      <div class="how-open"><strong data-en>Open:</strong><strong data-fr>Ouvrir :</strong> <span data-en>Press <kbd>ENV</kbd>.</span><span data-fr>Appuie sur <kbd>ENV</kbd>.</span></div>
+      <table class="compact">
+        <tr><td><span class="knob">KNOB 1</span> <span class="scr">ATK</span></td><td><span data-en>Start speed (1 ms = snappy, high = slow fade-in)</span><span data-fr>Vitesse de départ (1 ms = sec, élevé = fondu lent)</span></td></tr>
+        <tr><td><span class="knob">KNOB 2</span> <span class="scr">DEC</span></td><td><span data-en>Drop from peak to held level</span><span data-fr>Descente après le pic</span></td></tr>
+        <tr><td><span class="knob">KNOB 3</span> <span class="scr">SUS</span></td><td><span data-en>Volume while holding the key</span><span data-fr>Volume tant que tu tiens la touche</span></td></tr>
+        <tr><td><span class="knob">KNOB 4</span> <span class="scr">REL</span></td><td><span data-en>Tail length after releasing the key</span><span data-fr>Longueur de queue après avoir lâché</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="screen-row" id="pg-seq">
+    <figure class="screen-fig">
+      <img src="screens/seq.png" alt="BRUSSELS SEQ step screen" width="240" height="240">
+      <figcaption>SEQ · BAR · STEP</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">SEQ</span> — <span data-en>Step Sequencer</span><span data-fr>Séquenceur pas à pas</span></h3>
+      <div class="how-open"><strong data-en>Open:</strong><strong data-fr>Ouvrir :</strong> <span data-en>Press <kbd>SEQ</kbd>, turn <span class="knob">SELECT</span> to <span class="scr">STEP</span>.</span><span data-fr>Appuie sur <kbd>SEQ</kbd>, tourne <span class="knob">SELECT</span> vers <span class="scr">STEP</span>.</span></div>
+      <table class="compact">
+        <tr><td><span class="knob">KNOB 1</span> <span class="scr">STEP</span></td><td><span data-en>Pick step <span class="scr">1/16</span> to <span class="scr">16/16</span></span><span data-fr>Choisit le pas <span class="scr">1/16</span> à <span class="scr">16/16</span></span></td></tr>
+        <tr><td><span class="knob">KNOB 2</span> <span class="scr">NOTE</span></td><td><span data-en>Set the note (or just press a key)</span><span data-fr>Note du pas (ou appuie sur une touche)</span></td></tr>
+        <tr><td><span class="knob">KNOB 3</span> <span class="scr">TIME</span></td><td><span data-en>Note length, tie, or rest</span><span data-fr>Longueur, liaison ou silence</span></td></tr>
+        <tr><td><span class="knob">KNOB 4</span> <span class="scr">FLAG</span></td><td><span data-en>Accent, slide, or trigger rule</span><span data-fr>Accent, glissando ou règle</span></td></tr>
+      </table>
+      <p class="how-open" style="margin:10px 0 0" data-en>Fastest way: press <kbd>PLAY/STOP</kbd> + <kbd>REC</kbd> and play the keys live.</p>
+      <p class="how-open" style="margin:10px 0 0" data-fr>Le plus simple : <kbd>PLAY/STOP</kbd> + <kbd>REC</kbd>, puis joue directement sur les touches.</p>
+    </div>
+  </div>
+
+  <div class="screen-row" id="pg-kit">
+    <figure class="screen-fig">
+      <img src="screens/kit.png" alt="BRUSSELS DRUM NEW BEAT kit screen" width="240" height="240">
+      <figcaption>EDIT · KIT (NEW BEAT)</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">FANFARE</span> — <span data-en>Drum Kits (808, 909, NEW BEAT)</span><span data-fr>Batteries (808, 909, NEW BEAT)</span></h3>
+      <div class="how-open"><strong data-en>Open:</strong><strong data-fr>Ouvrir :</strong> <span data-en>Pick <span class="scr">T1</span> with <span class="knob">ALGORITHM</span>, turn <span class="knob">PRESETS</span>.</span><span data-fr>Choisis <span class="scr">T1</span> avec <span class="knob">ALGORITHM</span>, tourne <span class="knob">PRESETS</span>.</span></div>
+      <table class="compact">
+        <tr><td><strong>C4</strong> (B)</td><td><span data-en>Kick</span><span data-fr>Grosse caisse</span></td><td><strong>F4</strong> (,)</td><td>Tom</td></tr>
+        <tr><td><strong>C♯4</strong> (H)</td><td>Rim</td><td><strong>F♯4</strong> (L)</td><td><span data-en>Closed Hi-hat</span><span data-fr>Charleston fermé</span></td></tr>
+        <tr><td><strong>D4</strong> (N)</td><td><span data-en>Snare</span><span data-fr>Caisse claire</span></td><td><strong>A♯4</strong> (')</td><td><span data-en>Open Hi-hat</span><span data-fr>Charleston ouvert</span></td></tr>
+        <tr><td><strong>D♯4</strong> (J)</td><td>Clap</td><td><strong>C♯5</strong> (E)</td><td><span data-en>Bell / Cowbell</span><span data-fr>Cloche / Cowbell</span></td></tr>
+      </table>
+      <p class="how-open" style="margin:10px 0 0" data-en>One octave higher (<kbd>OCT+</kbd>), holding any drum key plays automatic rolls.</p>
+      <p class="how-open" style="margin:10px 0 0" data-fr>Une octave plus haut (<kbd>OCT+</kbd>), tenir une touche fait des roulements automatiques.</p>
+    </div>
+  </div>
+
+  <div class="screen-row" id="pg-menu">
+    <figure class="screen-fig">
+      <img src="screens/menu.png" alt="BRUSSELS Machine Menu screen" width="240" height="240">
+      <figcaption>HOLD HOME · MACHINE MENU</figcaption>
+    </figure>
+    <div class="screen-body">
+      <h3><span class="scr">MENU</span> — <span data-en>Colors, MIDI &amp; USB</span><span data-fr>Couleurs, MIDI et USB</span></h3>
+      <div class="how-open"><strong data-en>Open / close:</strong><strong data-fr>Ouvrir / fermer :</strong> <span data-en>Hold <kbd>HOME</kbd> for half a second.</span><span data-fr>Tiens <kbd>HOME</kbd> une demi-seconde.</span></div>
+      <p data-en>Turn <span class="knob">SELECT</span> for tabs (<span class="scr">SCREEN</span>, <span class="scr">AUDIO</span>, <span class="scr">MIDI</span>, <span class="scr">USB</span>, <span class="scr">SYSTEM</span>). Turn <span class="knob">KNOB 1</span>–<span class="knob">KNOB 4</span> (or <kbd>OCT−</kbd>/<kbd>OCT+</kbd>) to change a value.</p>
+      <p data-fr>Tourne <span class="knob">SELECT</span> pour les onglets (<span class="scr">SCREEN</span>, <span class="scr">AUDIO</span>, <span class="scr">MIDI</span>, <span class="scr">USB</span>, <span class="scr">SYSTEM</span>). Tourne <span class="knob">KNOB 1</span>–<span class="knob">KNOB 4</span> (ou <kbd>OCT−</kbd>/<kbd>OCT+</kbd>) pour régler.</p>
+      <div class="note tip"><strong data-en>4 Palettes:</strong><strong data-fr>4 palettes :</strong> <span class="scr">WHITE</span> <span data-en>(default)</span><span data-fr>(par défaut)</span>, <span class="scr">GAUFRE</span> <span data-en>(warm cream)</span><span data-fr>(crème)</span>, <span class="scr">NIGHT</span> <span data-en>(dark club)</span><span data-fr>(sombre club)</span>, <span class="scr">JIANT</span>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. SOUNDS -->
+<section id="sounds">
+  <h2 data-en>5. All BRUSSELS Sounds</h2>
+  <h2 data-fr>5. Tous les sons BRUSSELS</h2>
+  <p data-en>The 22 original BRUSSELS sounds sit at the end of <span class="scr">MANNEKEN</span> (presets 25–46), plus <span class="scr">SOUND OF C</span> on <span class="scr">THEO PISSBOY</span> and 3 drum kits on <span class="scr">FANFARE</span>.</p>
+  <p data-fr>Les 22 sons originaux BRUSSELS sont à la fin de <span class="scr">MANNEKEN</span> (presets 25–46), plus <span class="scr">SOUND OF C</span> sur <span class="scr">THEO PISSBOY</span> et 3 kits sur <span class="scr">FANFARE</span>.</p>
+
+  <div class="filters" role="group">
+    <button type="button" class="chip active" onclick="filterSounds('all', this)"><span data-en>All (26)</span><span data-fr>Tout (26)</span></button>
+    <button type="button" class="chip" onclick="filterSounds('mono', this)"><span data-en>Bass / Mono</span><span data-fr>Basses / 1 note</span></button>
+    <button type="button" class="chip" onclick="filterSounds('poly', this)"><span data-en>Chords / Pads</span><span data-fr>Accords / Nappes</span></button>
+    <button type="button" class="chip" onclick="filterSounds('mod', this)"><span data-en>Cables &amp; Chaos</span><span data-fr>Câbles &amp; Chaos</span></button>
+    <button type="button" class="chip" onclick="filterSounds('kit', this)"><span data-en>Drums</span><span data-fr>Batteries</span></button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="compact" id="sound-table">
+      <thead>
+        <tr>
+          <th><span data-en>Name</span><span data-fr>Nom</span></th>
+          <th><span data-en>Mode</span><span data-fr>Jeu</span></th>
+          <th><span data-en>What you hear</span><span data-fr>Ce qu'on entend</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cat="mono"><td><span class="scr">FRITES</span></td><td class="tag">MONO</td><td><span data-en>Biting MS-20 bass with slow LFO filter sweep.</span><span data-fr>Basse MS-20 mordante, LFO lent sur le filtre.</span></td></tr>
+        <tr data-cat="mono"><td><span class="scr">ZUKUNFT</span></td><td class="tag">MONO</td><td><span data-en>Dark, smooth bass, no attack click; slow filter &amp; highpass drift.</span><span data-fr>Sombre, vague lisse sans claquement ; filtre et coupe-haut lents.</span></td></tr>
+        <tr data-cat="mono"><td><span class="scr">DIKKENEK</span></td><td class="tag">MONO</td><td><span data-en>Tight, deep sub bass with long echo and sustain.</span><span data-fr>Corps serré, grave profond, écho long et tenue longue.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">STOEMP</span></td><td class="tag">CHORD</td><td><span data-en>Warm moving PWM pad with slow filter breathing.</span><span data-fr>Nappe PWM chaude qui bouge toute seule.</span></td></tr>
+        <tr data-cat="mono"><td><span class="scr">MOLENBEEK</span></td><td class="tag">MONO</td><td><span data-en>Dark tritone bass, dry (no chorus), wide slow sweep.</span><span data-fr>Sombre, intervalle tendu, sec sans chorus, filtre large.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">IXELLES</span></td><td class="tag">CHORD</td><td><span data-en>Two oscillators rubbing a minor third apart; gentle highpass motion.</span><span data-fr>Deux oscillateurs à la tierce mineure ; coupe-haut mouvant.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">TROTINETTE</span></td><td class="tag">CHORD</td><td><span data-en>Playful fifth-up chord stab with short echo.</span><span data-fr>Vif, quinte au-dessus, court écho.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">PIKNIK</span></td><td class="tag">CHORD</td><td><span data-en>Warm lush chorus pad (LFO moves the chorus).</span><span data-fr>Chaud, gros chorus mouvant.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">STIB DELAY</span></td><td class="tag">CHORD</td><td><span data-en>Long late echo answering after you release the chord.</span><span data-fr>Long écho qui répond après l'accord.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">MADOU</span></td><td class="tag">CHORD</td><td><span data-en>Tense dark chord, semitone rub, snappy &amp; gritty.</span><span data-fr>Sombre et serré, frottement d'un demi-ton, attaque sèche.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">HELMET</span></td><td class="tag">CHORD</td><td><span data-en>Heaviest chord sound: huge body, long echo &amp; space.</span><span data-fr>Le plus lourd en accord : gros corps, long écho et espace.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">LOUISE</span></td><td class="tag">CHORD</td><td><span data-en>Airy warm pad whose volume gently breathes.</span><span data-fr>Chaud et aéré, l'accord respire sur le volume.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">RIBAUCOURT</span></td><td class="tag">CHORD</td><td><span data-en>Slow-attack chord that wanders left to right.</span><span data-fr>Attaque douce, l'accord se promène gauche/droite.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">OSTEND</span></td><td class="tag">CHORD</td><td><span data-en>North Sea swell: breathy, round, very slow crest and tide.</span><span data-fr>La mer du Nord : rond, souffle, vague très lente.</span></td></tr>
+        <tr data-cat="mono mod"><td><span class="scr">EG BAS</span></td><td class="tag">CABLE</td><td><span data-en>Cable 1 patches envelope (<span class="scr">EG</span>) to lowpass (<span class="scr">BAS</span>).</span><span data-fr>Câble 1 : enveloppe (<span class="scr">EG</span>) vers passe-bas (<span class="scr">BAS</span>).</span></td></tr>
+        <tr data-cat="mono mod"><td><span class="scr">RANDOM KINDNESS</span></td><td class="tag">CABLE</td><td><span data-en>Smooth bass where a 1-in-8 step dice (<span class="scr">HASARD</span>) pops the filter.</span><span data-fr>Basse lisse où le dé (<span class="scr">HASARD</span>, 1/8 par pas) ouvre le filtre.</span></td></tr>
+        <tr data-cat="mono mod"><td><span class="scr">NOTE VOLEE</span></td><td class="tag">CABLE</td><td><span data-en>Soft lead with echo; <span class="scr">HASARD</span> gently bends random notes.</span><span data-fr>Lead doux avec écho ; <span class="scr">HASARD</span> glisse certaines notes.</span></td></tr>
+        <tr data-cat="poly mod"><td><span class="scr">ROSE HAUT</span></td><td class="tag">CABLE</td><td><span data-en>Pink noise (<span class="scr">ROSE</span>) makes the highpass wander smoothly.</span><span data-fr>Bruit rose (<span class="scr">ROSE</span>) faisant errer le coupe-haut.</span></td></tr>
+        <tr data-cat="mono mod"><td><span class="scr">EUCLIDE</span></td><td class="tag">CABLE</td><td><span data-en>3-in-8 Euclidean clock (<span class="scr">EUCL</span>) steps the filter in rhythm.</span><span data-fr>Horloge euclidienne 3-dans-8 (<span class="scr">EUCL</span>) sur le filtre.</span></td></tr>
+        <tr data-cat="mono mod"><td><span class="scr">CHAOS BAS</span></td><td class="tag">CABLE</td><td><span data-en>Chaos (<span class="scr">CHAOS</span>) moves <span class="scr">BAS</span> and <span class="scr">HAUT</span> for 16,455 steps without repeating.</span><span data-fr>Chaos (<span class="scr">CHAOS</span>) sur <span class="scr">BAS</span> et <span class="scr">HAUT</span> : 16 455 pas sans répétition.</span></td></tr>
+        <tr data-cat="mono mod"><td><span class="scr">SOUS SOL</span></td><td class="tag">SUB</td><td><span data-en>Clean <span class="scr">SUB</span> (92%) bypasses filters under a singing top.</span><span data-fr><span class="scr">SUB</span> pur (92 %) hors filtres sous un haut qui chante.</span></td></tr>
+        <tr data-cat="mono mod"><td><span class="scr">PHRASE</span></td><td class="tag">4 CABLES</td><td><span data-en><span class="scr">EG → BAS</span>, <span class="scr">EG → PROB</span> (attack boosts dice odds), <span class="scr">HASARD → VOIX</span>, <span class="scr">MG → HAUT</span>.</span><span data-fr><span class="scr">EG → BAS</span>, <span class="scr">EG → PROB</span> (l'attaque ouvre le dé), <span class="scr">HASARD → VOIX</span>, <span class="scr">MG → HAUT</span>.</span></td></tr>
+        <tr data-cat="poly"><td><span class="scr">SOUND OF C</span></td><td class="tag">PHASE</td><td><span data-en>Belgian New Beat chord on <span class="scr">THEO PISSBOY</span> (last preset).</span><span data-fr>Accord New Beat culte sur <span class="scr">THEO PISSBOY</span> (dernier preset).</span></td></tr>
+        <tr data-cat="kit"><td><span class="scr">NEW BEAT</span></td><td class="tag">DRUM</td><td><span data-en>Long saturated kick, dry snare, dark hats &amp; cowbell.</span><span data-fr>Grosse caisse longue saturée, caisse claire sèche, hats sombres, cowbell.</span></td></tr>
+        <tr data-cat="kit"><td><span class="scr">808 BOOM</span></td><td class="tag">DRUM</td><td><span data-en>Long booming 808 kick and lengthened hi-hat.</span><span data-fr>Grosse caisse 808 longue et charleston net.</span></td></tr>
+        <tr data-cat="kit"><td><span class="scr">909 CLUB</span></td><td class="tag">DRUM</td><td><span data-en>Punchy 909 club drum kit.</span><span data-fr>Kit 909 club percutant.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 6. LIMITS -->
+<section id="limits">
+  <h2 data-en>6. Good to Know</h2>
+  <h2 data-fr>6. Bon à savoir</h2>
+  <ul>
+    <li data-en><strong>6 tracks at once</strong> (<span class="scr">T1</span>–<span class="scr">T6</span>). Only one <span class="scr">FANFARE</span> drum kit per section.</li>
+    <li data-fr><strong>6 pistes simultanées</strong> (<span class="scr">T1</span>–<span class="scr">T6</span>). Un seul kit batterie <span class="scr">FANFARE</span> par section.</li>
+    <li data-en><strong>Up to 8 voices</strong> on <span class="scr">MANNEKEN</span> — each voice has its own MS-20 filter.</li>
+    <li data-fr><strong>Jusqu'à 8 voix</strong> sur <span class="scr">MANNEKEN</span> — chaque voix a son propre filtre MS-20.</li>
+    <li data-en><strong>4 patch cables</strong> per track (<span class="scr">SLOT 1/4</span>–<span class="scr">4/4</span>).</li>
+    <li data-fr><strong>4 câbles</strong> par piste (<span class="scr">SLOT 1/4</span>–<span class="scr">4/4</span>).</li>
+    <li data-en><strong>No WAV samples</strong> — every drum and synth is synthesized live.</li>
+    <li data-fr><strong>Pas de samples WAV</strong> — tout est synthétisé en direct.</li>
+    <li data-en><strong>USB name:</strong> <span class="scr">BRUSSELS</span> (and <span class="scr">BRUSSELS Update</span> during updates).</li>
+    <li data-fr><strong>Nom USB :</strong> <span class="scr">BRUSSELS</span> (et <span class="scr">BRUSSELS Update</span> pendant les mises à jour).</li>
+  </ul>
+</section>
+
+<!-- 7. INSTALL & RESCUE -->
+<section id="install">
+  <h2 data-en>7. Install &amp; Rescue (<span class="scr">UBOOT</span>)</h2>
+  <h2 data-fr>7. Installer &amp; Secours (<span class="scr">UBOOT</span>)</h2>
+  <ol>
+    <li data-en>Close any DAW (Ableton, Logic…) holding the USB MIDI port.</li>
+    <li data-fr>Ferme tout DAW (Ableton, Logic…) qui pourrait occuper le port USB MIDI.</li>
+    <li data-en>Open the installer in <strong>Chrome, Brave, or Edge</strong>: <a href="/webapp/installer/">BRUSSELS WebMIDI Installer</a>.</li>
+    <li data-fr>Ouvre l'installeur dans <strong>Chrome, Brave ou Edge</strong> : <a href="/webapp/installer/">Installateur WebMIDI BRUSSELS</a>.</li>
+    <li data-en>Plug in the powered-on FM-1 with a <strong>data USB cable</strong>, click <strong>Install</strong>, and wait until it reboots.</li>
+    <li data-fr>Branche le FM-1 allumé avec un <strong>câble USB data</strong>, clique sur <strong>Install</strong> et attends le redémarrage complet.</li>
+  </ol>
+  <div class="note warn">
+    <p style="margin:0" data-en><strong>Rescue mode (<span class="scr">UBOOT</span>):</strong> hold <kbd>OCT−</kbd> + <kbd>OCT+</kbd> for <strong>5 seconds</strong> (countdown starts at 2 s; release early to cancel). When <span class="scr">UBOOT</span> appears, tick <em>Resume an interrupted update</em> in the installer — or flash stock <code>FM-1.fwsc</code> to restore factory firmware.</p>
+    <p style="margin:0" data-fr><strong>Mode secours (<span class="scr">UBOOT</span>) :</strong> tiens <kbd>OCT−</kbd> + <kbd>OCT+</kbd> pendant <strong>5 secondes</strong> (compte à rebours à 2 s ; lâcher annule). Quand <span class="scr">UBOOT</span> s'affiche, coche <em>Resume an interrupted update</em> dans l'installeur — ou recharge <code>FM-1.fwsc</code> pour revenir d'usine.</p>
+  </div>
+</section>
+
+<footer>
+  <span data-en>BRUSSELS 0.9 · Built on JIANT / Felucca · All screen captures taken directly from live firmware.</span>
+  <span data-fr>BRUSSELS 0.9 · Basé sur JIANT / Felucca · Toutes les captures proviennent directement du firmware.</span>
+</footer>
+
+</main>
+</div>
+
+<script>
+// Exact M-VAVE FM-1 front panel SVG built from the real hardware coordinate table (JIANT/web/emu/index.html)
+(function drawFM1() {
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("fm1-svg");
+  const el = (tag, attrs, parent = svg) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    parent.appendChild(n);
+    return n;
+  };
+  const txt = (x, y, s, size, fill = "var(--hw-label)", weight = 600, parent = svg) => {
+    const t = el("text", {
+      x, y, "text-anchor": "middle",
+      "font-family": "-apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+      "font-size": size, "font-weight": weight, fill, "letter-spacing": "0.04em"
+    }, parent);
+    t.textContent = s;
+    return t;
+  };
+
+  // Outer chassis
+  el("rect", { x: 4, y: 4, width: 992, height: 616, rx: 36, fill: "var(--hw-body)", stroke: "var(--hw-stroke)", "stroke-width": 1.5 });
+
+  // Trays (OCT tray left, 2x6 button tray right)
+  el("rect", { x: 50, y: 250, width: 220, height: 50, rx: 12, fill: "var(--hw-tray)" });
+  el("rect", { x: 568, y: 160, width: 400, height: 140, rx: 14, fill: "var(--hw-tray)" });
+
+  // Center-left 240x240 LCD screen with real BRUSSELS capture inside
+  el("rect", { x: 292, y: 44, width: 256, height: 256, rx: 16, fill: "var(--hw-screen-bd)" });
+  const clip = el("clipPath", { id: "lcd-clip" });
+  el("rect", { x: 300, y: 52, width: 240, height: 240, rx: 6 }, clip);
+  const img = el("image", {
+    href: "screens/fanfare_being.png",
+    x: 300, y: 52, width: 240, height: 240,
+    "clip-path": "url(#lcd-clip)",
+    style: "image-rendering: pixelated;"
+  });
+  void img;
+
+  // 8 knobs in exact physical coordinates
+  const KNOBS = [
+    ["MASTER", 105, 100, 24], ["SELECT", 215, 100, 24],
+    ["PRESETS", 105, 205, 24], ["ALGORITHM", 215, 205, 24],
+    ["KNOB 1", 610, 100, 22], ["KNOB 2", 714, 100, 22],
+    ["KNOB 3", 818, 100, 22], ["KNOB 4", 922, 100, 22],
+  ];
+  KNOBS.forEach(([name, x, y, r]) => {
+    el("circle", { cx: x, cy: y, r: r + 5, fill: "var(--hw-tray)" });
+    el("circle", { cx: x, cy: y, r, fill: "var(--hw-part)", stroke: "var(--hw-part-stroke)", "stroke-width": 1.8 });
+    if (name === "MASTER") {
+      el("line", { x1: x, y1: y, x2: x + 13, y2: y - 13, stroke: "var(--hw-label)", "stroke-width": 2.5, "stroke-linecap": "round" });
+    }
+    txt(x, y - r - 12, name, 14, "var(--hw-label)", 600);
+  });
+
+  // Buttons helper
+  const btn = (x, y, w, h, label, sub) => {
+    el("rect", { x, y, width: w, height: h, rx: 8, fill: "var(--hw-part)", stroke: "var(--hw-part-stroke)", "stroke-width": 1.4 });
+    const col = label === "REC" ? "var(--accent)" : "var(--hw-label)";
+    if (sub) {
+      txt(x + w / 2, y + h / 2 - 2, label, 10.5, col, 600);
+      txt(x + w / 2, y + h / 2 + 11, sub, 9.5, col, 500);
+    } else {
+      txt(x + w / 2, y + h / 2 + 4.5, label, 12.2, col, 600);
+    }
+  };
+
+  // OCT- / OCT+ under PRESETS & ALGORITHM
+  btn(60, 258, 90, 34, "OCT-");
+  btn(170, 258, 90, 34, "OCT+");
+
+  // 2x6 button grid on the right (exact order)
+  const ROW1 = ["FX", "SCL", "ENV", "LFO", "EDIT", "GLO"];
+  const ROW2 = ["HOME", "SAVE", "ARP", "SEQ", "PLAY", "REC"];
+  for (let i = 0; i < 6; i++) {
+    btn(582 + i * 63, 174, 54, 48, ROW1[i]);
+    btn(582 + i * 63, 236, 54, 48, ROW2[i], ROW2[i] === "PLAY" ? "STOP" : "");
+  }
+
+  // Bottom 27 touch keys (F3..G5): exact 16 white bottom + 11 black top (3-2-3-2-1)
+  const x0 = 36, y0 = 332, w = 928, h = 256;
+  el("rect", { x: x0, y: y0, width: w, height: h, rx: 18, fill: "var(--hw-tray)" });
+  const pitch = (w - 24) / 16, kw = pitch * 0.78, kh = h * 0.425, sw = Math.max(3, kw * 0.14);
+  const drawKey = (cx, cy) => {
+    const y = cy - kh / 2;
+    el("rect", { x: cx - kw / 2, y, width: kw, height: kh, rx: kw / 2, fill: "var(--hw-key)", stroke: "var(--hw-key-stroke)", "stroke-width": 1.3 });
+    el("rect", { x: cx - sw / 2, y: y + kw * 0.4, width: sw, height: kh - kw * 0.8, rx: sw / 2, fill: "var(--hw-slit)" });
+  };
+  const BLACK_AFTER = [0, 1, 2, 4, 5, 7, 8, 9, 11, 12, 14];
+  const cyTop = y0 + h * 0.27, cyBot = y0 + h * 0.73;
+  for (let i = 0; i < 16; i++) drawKey(x0 + 12 + (i + 0.5) * pitch, cyBot);
+  for (const a of BLACK_AFTER) drawKey(x0 + 12 + (a + 1) * pitch, cyTop);
+})();
+
+function setTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  document.getElementById("btn-light").classList.toggle("active", theme === "light");
+  document.getElementById("btn-dark").classList.toggle("active", theme === "dark");
+  try { localStorage.setItem("brussels_manual_theme", theme); } catch (e) {}
+}
+
+function setLang(lang) {
+  document.documentElement.setAttribute("data-lang", lang);
+  document.documentElement.setAttribute("lang", lang);
+  document.getElementById("btn-en").classList.toggle("active", lang === "en");
+  document.getElementById("btn-fr").classList.toggle("active", lang === "fr");
+  try { localStorage.setItem("brussels_manual_lang", lang); } catch (e) {}
+}
+
+(function initPrefs() {
+  let theme = "light", lang = "en";
+  try {
+    theme = localStorage.getItem("brussels_manual_theme") || "light";
+    lang = localStorage.getItem("brussels_manual_lang") || "en";
+  } catch (e) {}
+  setTheme(theme === "dark" ? "dark" : "light");
+  setLang(lang === "fr" ? "fr" : "en");
+})();
+
+function filterSounds(cat, btn) {
+  document.querySelectorAll(".filters .chip").forEach((c) => c.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  document.querySelectorAll("#sound-table tbody tr").forEach((r) => {
+    const c = r.getAttribute("data-cat") || "";
+    r.style.display = (cat === "all" || c.indexOf(cat) !== -1) ? "" : "none";
+  });
+}
+</script>
+</body>
+</html>

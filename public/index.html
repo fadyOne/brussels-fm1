@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRUSSELS FM-1 — by Piknik Elektronik</title>
+<meta name="description" content="BRUSSELS FM-1 by Piknik Elektronik : firmware custom open-source pour M-VAVE FM-1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #fbfaf7;
+  --surface: #ffffff;
+  --ink: #181715;
+  --dim: #706c64;
+  --line: #e4e0d8;
+  --accent: #7a2635;
+  --accent-2: #1f6b6e;
+  --body: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+:root[data-theme="dark"] {
+  --bg: #111010;
+  --surface: #181717;
+  --ink: #eeebe4;
+  --dim: #969087;
+  --line: #2a2826;
+  --accent: #d98996;
+  --accent-2: #6bc4c7;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 15px/1.65 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 1020px; margin: 0 auto; padding: 0 24px 64px; }
+
+/* Top bar */
+header.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+  font: 400 12px/1.3 var(--mono);
+  color: var(--dim);
+}
+.brand { display: flex; align-items: baseline; gap: 10px; color: var(--ink); letter-spacing: .04em; }
+.brand .sub { color: var(--dim); letter-spacing: .02em; }
+.controls { display: flex; align-items: center; gap: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--line); }
+.seg button {
+  background: transparent;
+  color: var(--dim);
+  border: 0;
+  padding: 5px 10px;
+  font: 400 11px/1.2 var(--mono);
+  cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { color: var(--ink); background: var(--surface); }
+
+/* Hero */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(240px, 300px);
+  gap: 48px;
+  align-items: center;
+  padding: 56px 0 52px;
+  border-bottom: 1px solid var(--line);
+}
+.eyebrow {
+  margin: 0 0 12px;
+  font: 400 11px/1.4 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+h1 {
+  margin: 0 0 14px;
+  font: 400 clamp(30px, 4.4vw, 44px)/1.12 var(--body);
+  letter-spacing: -.015em;
+}
+h1 .fm { color: var(--accent); margin-left: .18em; }
+.lede {
+  margin: 0 0 28px;
+  max-width: 52ch;
+  color: var(--dim);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font: 400 12px/1.3 var(--mono);
+  letter-spacing: .03em;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.btn:hover { border-color: var(--ink); }
+.btn.primary { border-color: var(--ink); }
+.btn.primary:hover { background: var(--ink); color: var(--bg); }
+.meta-line { margin: 0; font: 400 12px/1.6 var(--mono); color: var(--dim); }
+
+/* Hero LCD preview */
+.lcd-frame {
+  margin: 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 14px;
+}
+.lcd-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  image-rendering: pixelated;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.lcd-cap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  font: 400 11px/1.3 var(--mono);
+  color: var(--dim);
+}
+.dots { display: inline-flex; gap: 5px; }
+.dots button {
+  width: 7px; height: 7px; padding: 0; border-radius: 50%;
+  border: 1px solid var(--dim); background: transparent; cursor: pointer;
+}
+.dots button[aria-current="true"] { background: var(--accent); border-color: var(--accent); }
+
+/* Sections */
+section.block { padding: 52px 0; border-bottom: 1px solid var(--line); }
+.sec-head { margin-bottom: 28px; max-width: 58ch; }
+h2 {
+  margin: 0 0 8px;
+  font: 400 clamp(20px, 2.4vw, 25px)/1.25 var(--body);
+  letter-spacing: -.01em;
+}
+.sec-head p { margin: 0; color: var(--dim); font-size: 14px; }
+
+/* Gallery 1: drawings only, animated */
+.zoo {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.card {
+  margin: 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 12px 12px 10px;
+}
+.card .art {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.card .art img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  image-rendering: pixelated;
+}
+.card figcaption {
+  margin-top: 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font: 400 11px/1.3 var(--mono);
+  color: var(--ink);
+  letter-spacing: .04em;
+}
+.card figcaption span { color: var(--dim); font-size: 10px; }
+
+/* Gallery 2: full 240x240 real screens with variables */
+.shots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.shot {
+  margin: 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 12px;
+}
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  image-rendering: pixelated;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.shot figcaption {
+  margin-top: 10px;
+  font: 400 11px/1.4 var(--mono);
+  color: var(--dim);
+  letter-spacing: .03em;
+}
+.shot figcaption strong { font-weight: 400; color: var(--ink); display: block; margin-bottom: 2px; }
+
+/* Steps */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.step {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+.step .no { font: 400 11px/1 var(--mono); color: var(--accent-2); letter-spacing: .1em; }
+.step h3 { margin: 8px 0 8px; font: 400 16px/1.3 var(--body); }
+.step p { margin: 0; font-size: 13.5px; color: var(--dim); line-height: 1.6; }
+
+/* Footer — single discreet 11px credit */
+footer {
+  padding-top: 24px;
+  font: 400 11px/1.7 var(--mono);
+  color: var(--dim);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+footer a { text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 820px) {
+  .hero { grid-template-columns: 1fr; gap: 28px; padding: 36px 0; }
+  .lcd-frame { max-width: 280px; }
+  .zoo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots, .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .shots, .steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span>BRUSSELS FM-1</span>
+      <span class="sub">by Piknik Elektronik</span>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Language">
+        <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <div class="seg" role="group" aria-label="Theme">
+        <button type="button" data-theme-btn="light" aria-pressed="true" data-i="t_light">Clair</button>
+        <button type="button" data-theme-btn="dark" aria-pressed="false" data-i="t_dark">Sombre</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow" data-i="eyebrow">Firmware custom · M-VAVE FM-1</p>
+      <h1>BRUSSELS<span class="fm">FM-1</span></h1>
+      <p class="lede" data-i="lede">Un firmware complet et léger pour le M-VAVE FM-1, pensé et illustré à Bruxelles par Piknik Elektronik. Six pistes, synthèse analogique MS-20, FM6, lo-fi SNCB, séquenceur 64 pas et dessins originaux qui s’animent avec ta musique.</p>
+      <div class="ctas">
+        <a class="btn primary" href="/webapp/installer/" data-i="cta_install">Installer sur FM-1</a>
+        <a class="btn" href="/emu/" data-i="cta_emu">Émulateur</a>
+        <a class="btn" href="/webapp/editor/" data-i="cta_editor">Éditeur web</a>
+        <a class="btn" href="/notice/" data-i="cta_notice">Notice</a>
+      </div>
+      <p class="meta-line" data-i="meta">Version brussels-0.9 · Installation via Chrome, Brave ou Edge · Retour au firmware officiel à tout moment.</p>
+    </div>
+
+    <figure class="lcd-frame">
+      <img id="hero-lcd" src="screens_bx/scr_home.webp" width="240" height="240" alt="BRUSSELS FM-1 LCD">
+      <figcaption class="lcd-cap">
+        <span id="hero-label">HOME · ECO</span>
+        <span class="dots" id="hero-dots"></span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- 1. Les dessins animés seuls -->
+  <section class="block" id="dessins">
+    <div class="sec-head">
+      <p class="eyebrow" data-i="z_eb">Créations originales</p>
+      <h2 data-i="z_h2">Les dessins qui vivent dans le synthé</h2>
+      <p data-i="z_p">Capturés directement depuis le firmware BRUSSELS. Chaque moteur a son personnage et réagit en direct au son et aux potards.</p>
+    </div>
+    <div class="zoo">
+      <figure class="card"><div class="art"><img src="screens_bx/draw_manneken.webp" alt="Manneken-Pis"></div><figcaption>MANNEKEN <span>ANALOG</span></figcaption></figure>
+      <figure class="card"><div class="art"><img src="screens_bx/draw_sncb.webp" alt="Tram SNCB"></div><figcaption>SNCB <span>LOFI</span></figcaption></figure>
+      <figure class="card"><div class="art"><img src="screens_bx/draw_theo.webp" alt="Théo Pissboy"></div><figcaption>THEO PISSBOY <span>PHASE</span></figcaption></figure>
+      <figure class="card"><div class="art"><img src="screens_bx/draw_fanfare.webp" alt="Brussels Piknik Elektronik"></div><figcaption>PIKNIK ELEKTRONIK <span>DRUM-X</span></figcaption></figure>
+      <figure class="card"><div class="art"><img src="screens_bx/draw_gaufre.webp" alt="Grote Markt"></div><figcaption>GROTE MARKT <span>WHEEL</span></figcaption></figure>
+      <figure class="card"><div class="art"><img src="screens_bx/draw_pigeons.webp" alt="Salade Tout"></div><figcaption>SALADE TOUT <span>ANIMAL</span></figcaption></figure>
+      <figure class="card"><div class="art"><img src="screens_bx/draw_lion.webp" alt="Lion flamand"></div><figcaption>LION FLAMAND <span>VOWEL</span></figcaption></figure>
+      <figure class="card"><div class="art"><img src="screens_bx/scr_home.webp" alt="Home Eco"></div><figcaption>HOME · ECO <span>4 PISTES</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 2. Les vrais écrans 240x240 avec variables -->
+  <section class="block" id="ecrans">
+    <div class="sec-head">
+      <p class="eyebrow" data-i="s_eb">Sur l’écran 240×240</p>
+      <h2 data-i="s_h2">Les vrais écrans, avec leurs paramètres</h2>
+      <p data-i="s_p">Rien de redessiné : ce sont les vraies pages du FM-1 en mouvement, avec les quatre potards en haut et l’animation au centre.</p>
+    </div>
+    <div class="shots">
+      <figure class="shot"><img src="screens_bx/scr_home.webp" width="240" height="240" alt="HOME ECO"><figcaption><strong>HOME · ECO</strong><span data-i="c_home">Les 4 personnages sous MORPH / TUNE / TONE / DECAY</span></figcaption></figure>
+      <figure class="shot"><img src="screens_bx/scr_manneken.webp" width="240" height="240" alt="EDIT MANNEKEN"><figcaption><strong>EDIT · MANNEKEN</strong><span data-i="c_man">WAVE / DETUNE / MIX / NOISE + câbles MS-20</span></figcaption></figure>
+      <figure class="shot"><img src="screens_bx/scr_drum.webp" width="240" height="240" alt="BRUSSELS PIKNIK ELEKTRONIK"><figcaption><strong>DRUM-X · PIKNIK ELEKTRONIK</strong><span data-i="c_pipe">Kit synthétisé 8 pistes · 808 / 909 / NEW BEAT</span></figcaption></figure>
+      <figure class="shot"><img src="screens_bx/scr_sncb.webp" width="240" height="240" alt="EDIT SNCB"><figcaption><strong>EDIT · SNCB</strong><span data-i="c_sncb">Tram SNCB · GARE MIDI · CHIP / WAVE / DUTY / CRUSH</span></figcaption></figure>
+      <figure class="shot"><img src="screens_bx/scr_theo.webp" width="240" height="240" alt="EDIT THEO PISSBOY"><figcaption><strong>EDIT · THEO PISSBOY</strong><span data-i="c_theo">Synthèse PHASE · timbre et modulation</span></figcaption></figure>
+      <figure class="shot"><img src="screens_bx/scr_lion.webp" width="240" height="240" alt="EDIT VOWEL LION"><figcaption><strong>EDIT · VOWEL · LION</strong><span data-i="c_ato">Lion flamand · VOWEL / SUB sur MANNEKEN</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 3. 3 étapes simples -->
+  <section class="block" id="start">
+    <div class="sec-head">
+      <p class="eyebrow" data-i="st_eb">Prise en main</p>
+      <h2 data-i="st_h2">Trois outils, directement dans le navigateur</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div>
+          <span class="no">01</span>
+          <h3 data-i="st1_h">Essayer dans le navigateur</h3>
+          <p data-i="st1_p">L’émulateur fait tourner le vrai firmware BRUSSELS. Teste chaque son, chaque dessin et le séquenceur sans brancher le FM-1.</p>
+        </div>
+        <a class="btn" href="/emu/" data-i="st1_b">Ouvrir l’émulateur</a>
+      </div>
+      <div class="step">
+        <div>
+          <span class="no">02</span>
+          <h3 data-i="st2_h">Installer sur le FM-1</h3>
+          <p data-i="st2_p">Branche ton FM-1 en USB (câble data) dans Chrome, Brave ou Edge, clique sur Installer et laisse redémarrer sans débrancher.</p>
+        </div>
+        <a class="btn" href="/webapp/installer/" data-i="st2_b">Ouvrir l’installeur</a>
+      </div>
+      <div class="step">
+        <div>
+          <span class="no">03</span>
+          <h3 data-i="st3_h">Éditer &amp; sauvegarder</h3>
+          <p data-i="st3_p">L’éditeur web affiche tes pistes, sons et projets en direct pendant que le FM-1 joue, avec sauvegarde en un clic.</p>
+        </div>
+        <a class="btn" href="/webapp/editor/" data-i="st3_b">Ouvrir l’éditeur</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>BRUSSELS by Piknik Elektronik · GPL-3.0</span>
+    <span>Built on JIANT &amp; Felucca (Hügelton Instruments). M-VAVE and FM-1 are trademarks of their respective owners.</span>
+  </footer>
+</div>
+
+<script>
+const SLIDES = [
+  ["screens_bx/scr_home.webp", "HOME · ECO"],
+  ["screens_bx/scr_manneken.webp", "EDIT · MANNEKEN"],
+  ["screens_bx/scr_drum.webp", "DRUM-X · PIKNIK ELEKTRONIK"],
+  ["screens_bx/scr_sncb.webp", "EDIT · SNCB"],
+  ["screens_bx/scr_theo.webp", "EDIT · THEO PISSBOY"],
+  ["screens_bx/scr_lion.webp", "EDIT · VOWEL · LION"],
+];
+let cur = 0, timer = null;
+const lcd = document.getElementById("hero-lcd");
+const lbl = document.getElementById("hero-label");
+const dots = document.getElementById("hero-dots");
+function showSlide(i) {
+  cur = (i + SLIDES.length) % SLIDES.length;
+  lcd.src = SLIDES[cur][0];
+  lbl.textContent = SLIDES[cur][1];
+  dots.querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-current", k === cur ? "true" : "false"));
+}
+SLIDES.forEach((_, i) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.setAttribute("aria-label", SLIDES[i][1]);
+  b.addEventListener("click", () => { showSlide(i); resetTimer(); });
+  dots.appendChild(b);
+});
+function resetTimer() { clearInterval(timer); timer = setInterval(() => showSlide(cur + 1), 3600); }
+showSlide(0); resetTimer();
+
+const I18N = {
+  fr: {
+    t_light: "Clair", t_dark: "Sombre",
+    eyebrow: "Firmware custom · M-VAVE FM-1",
+    lede: "Un firmware complet et léger pour le M-VAVE FM-1, pensé et illustré à Bruxelles par Piknik Elektronik. Six pistes, synthèse analogique MS-20, FM6, lo-fi SNCB, séquenceur 64 pas et dessins originaux qui s’animent avec ta musique.",
+    cta_install: "Installer sur FM-1", cta_emu: "Émulateur", cta_editor: "Éditeur web", cta_notice: "Notice",
+    meta: "Version brussels-0.9 · Installation via Chrome, Brave ou Edge · Retour au firmware officiel à tout moment.",
+    z_eb: "Créations originales", z_h2: "Les dessins qui vivent dans le synthé",
+    z_p: "Capturés directement depuis le firmware BRUSSELS. Chaque moteur a son personnage et réagit en direct au son et aux potards.",
+    s_eb: "Sur l’écran 240×240", s_h2: "Les vrais écrans, avec leurs paramètres",
+    s_p: "Rien de redessiné : ce sont les vraies pages du FM-1 en mouvement, avec les quatre potards en haut et l’animation au centre.",
+    c_home: "Les 4 personnages sous MORPH / TUNE / TONE / DECAY",
+    c_man: "WAVE / DETUNE / MIX / NOISE + câbles MS-20",
+    c_pipe: "La pipe de Magritte · VOWEL / SUB / MORPH",
+    c_sncb: "Tram SNCB · GARE MIDI · CHIP / WAVE / DUTY / CRUSH",
+    c_theo: "Synthèse PHASE · timbre et modulation",
+    c_ato: "FM 6 opérateurs · 32 algorithmes · banques DX7",
+    st_eb: "Prise en main", st_h2: "Trois outils, directement dans le navigateur",
+    st1_h: "Essayer dans le navigateur", st1_p: "L’émulateur fait tourner le vrai firmware BRUSSELS. Teste chaque son, chaque dessin et le séquenceur sans brancher le FM-1.", st1_b: "Ouvrir l’émulateur",
+    st2_h: "Installer sur le FM-1", st2_p: "Branche ton FM-1 en USB (câble data) dans Chrome, Brave ou Edge, clique sur Installer et laisse redémarrer sans débrancher.", st2_b: "Ouvrir l’installeur",
+    st3_h: "Éditer & sauvegarder", st3_p: "L’éditeur web affiche tes pistes, sons et projets en direct pendant que le FM-1 joue, avec sauvegarde en un clic.", st3_b: "Ouvrir l’éditeur",
+  },
+  en: {
+    t_light: "Light", t_dark: "Dark",
+    eyebrow: "Custom firmware · M-VAVE FM-1",
+    lede: "A complete, lightweight firmware for the M-VAVE FM-1, designed and illustrated in Brussels by Piknik Elektronik. Six tracks, MS-20 analog synth, FM6, SNCB lo-fi, 64-step sequencer and original drawings that move with your music.",
+    cta_install: "Install on FM-1", cta_emu: "Emulator", cta_editor: "Web editor", cta_notice: "Manual",
+    meta: "Version brussels-0.9 · Installs from Chrome, Brave or Edge · Return to official firmware anytime.",
+    z_eb: "Original artwork", z_h2: "The drawings living inside the synth",
+    z_p: "Captured straight from the BRUSSELS firmware. Each engine has its own character reacting live to audio and knobs.",
+    s_eb: "On the 240×240 screen", s_h2: "Real screens, with their live parameters",
+    s_p: "Nothing redrawn: these are actual moving FM-1 pages with the four top knobs and the live animation in the center.",
+    c_home: "The 4 characters below MORPH / TUNE / TONE / DECAY",
+    c_man: "WAVE / DETUNE / MIX / NOISE + MS-20 patch cables",
+    c_pipe: "Magritte's pipe · VOWEL / SUB / MORPH",
+    c_sncb: "SNCB tram · GARE MIDI · CHIP / WAVE / DUTY / CRUSH",
+    c_theo: "PHASE synthesis · timbre and modulation",
+    c_ato: "6-operator FM · 32 algorithms · DX7 banks",
+    st_eb: "Getting started", st_h2: "Three tools, straight in your browser",
+    st1_h: "Try it in the browser", st1_p: "The emulator runs the real BRUSSELS firmware. Explore every sound, drawing and sequencer step without plugging in the FM-1.", st1_b: "Open emulator",
+    st2_h: "Install on your FM-1", st2_p: "Connect your FM-1 with a USB data cable in Chrome, Brave or Edge, click Install and let it reboot without unplugging.", st2_b: "Open installer",
+    st3_h: "Edit & back up", st3_p: "The web editor shows your tracks, sounds and projects live while the FM-1 plays, with one-click backup.", st3_b: "Open editor",
+  }
+};
+function setLang(l) {
+  document.documentElement.lang = l;
+  document.querySelectorAll("[data-i]").forEach(el => { if (I18N[l][el.dataset.i]) el.textContent = I18N[l][el.dataset.i]; });
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+}
+document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+document.querySelectorAll("[data-theme-btn]").forEach(b => b.addEventListener("click", () => {
+  const th = b.dataset.themeBtn;
+  document.documentElement.dataset.theme = th;
+  document.querySelectorAll("[data-theme-btn]").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.themeBtn === th)));
+}));
+</script>
+</body>
+</html>
