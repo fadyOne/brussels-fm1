@@ -2,7 +2,7 @@
 
 Custom firmware for the M-VAVE FM-1 by Piknik Elektronik.
 
-Web installer, emulator & manual: https://brussels-fm1.piknikelektronik.com
+Web installer, emulator & manual: https://brussels.piknikelektronik.com
 
 ## Build
 
